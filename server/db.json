@@ -1,0 +1,411 @@
+{
+    "products": [
+        {
+            "id": "",
+            "name": "megan bag",
+            "price": "$340",
+            "description": "An everyday slouchy shoulder bag to have all you need at your fingertips. Natural edge flap makes every bag one-of-a-kind.",
+            "photo1": "",
+            "photo2": "",
+            "photo3": "",
+            "photo4": "",
+            "photo5": ""
+        },
+        {
+            "id": "",
+            "name": "mini bag",
+            "price": "$175",
+            "description": "A crossbody bag for a night on the town or a gal who just needs the essentials. Natural edge flap makes every bag one-of-a-kind.",
+            "photo1": "",
+            "photo2": "",
+            "photo3": "",
+            "photo4": "",
+            "photo5": ""
+        },
+        {
+            "id": "",
+            "name": "christa clutch",
+            "price": "$124",
+            "description": "A classy zipper clutch that's versatile enough to carry on it's own or to slip into a larger bag. Comes with a removable wrist strap.",
+            "photo1": "",
+            "photo2": "",
+            "photo3": "",
+            "photo4": "",
+            "photo5": ""
+        },
+        {
+            "id": "",
+            "name": "passport cover",
+            "price": "$60",
+            "description": "Carry your passports in style and keep all your important travel documents and cards together.",
+            "photo1": "",
+            "photo2": "",
+            "photo3": "",
+            "photo4": "",
+            "photo5": ""
+        },
+        {
+            "id": "",
+            "name": "mia snap wallet",
+            "price": "$50",
+            "description": "A pocket-sized wallet, perfect for those times when you don't want to carry a bag.",
+            "photo1": "",
+            "photo2": "",
+            "photo3": "",
+            "photo4": "",
+            "photo5": ""
+        },
+        {
+            "id": "",
+            "name": "big tassel keychain",
+            "price": "$18",
+            "description": "A little pizzazz to add to your keys or bag. 5 1/2\" long",
+            "photo1": "",
+            "photo2": "",
+            "photo3": "",
+            "photo4": "",
+            "photo5": ""
+        },
+        {
+            "id": "",
+            "name": "mini tassel keychain",
+            "price": "$14",
+            "description": "A little pizzazz to add to your keys or bag. 2 3/4\" long",
+            "photo1": "",
+            "photo2": "",
+            "photo3": "",
+            "photo4": "",
+            "photo5": ""
+        }
+   ],
+   "SKUs": [
+        {
+          "id": "",
+          "product_id FK": 1,
+          "SKU": "BD0162-536",
+          "color": "cherry",
+          "stock": 1
+        },
+        {
+          "id": "",
+          "product_id FK": 1,
+          "SKU": "BD0162-170",
+          "color": "sunshine",
+          "stock": 0
+        },
+        {
+          "id": "",
+          "product_id FK": 1,
+          "SKU": "BD0162-028",
+          "color": "blackout",
+          "stock": 1
+        },
+        {
+          "id": "",
+          "product_id FK": 1,
+          "SKU": "BD0162-156",
+          "color": "graphite",
+          "stock": 0
+        },
+        {
+          "id": "",
+          "product_id FK": 2,
+          "SKU": "BD2466-653",
+          "color": "wine",
+          "stock": 1
+        },
+        {
+          "id": "",
+          "product_id FK": 2,
+          "SKU": "BD2466-006",
+          "color": "tobacco",
+          "stock": 0
+        },
+        {
+          "id": "",
+          "product_id FK": 2,
+          "SKU": "BD2466-166",
+          "color": "teal",
+          "stock": 1
+        },
+        {
+          "id": "",
+          "product_id FK": 2,
+          "SKU": "BD2466-028",
+          "color": "blackout",
+          "stock": 1
+        },
+        {
+          "id": "",
+          "product_id FK": 3,
+          "SKU": "BD1926-536",
+          "color": "cherry",
+          "stock": 5
+        },
+        {
+          "id": "",
+          "product_id FK": 3,
+          "SKU": "BD1926-170",
+          "color": "sunshine",
+          "stock": 0
+        },
+        {
+          "id": "",
+          "product_id FK": 3,
+          "SKU": "BD1926-028",
+          "color": "blackout",
+          "stock": 4
+        },
+        {
+          "id": "",
+          "product_id FK": 3,
+          "SKU": "BD1926-156",
+          "color": "graphite",
+          "stock": 4
+        },
+        {
+          "id": "",
+          "product_id FK": 3,
+          "SKU": "BD1926-653",
+          "color": "wine",
+          "stock": 5
+        },
+        {
+          "id": "",
+          "product_id FK": 3,
+          "SKU": "BD1926-006",
+          "color": "tobacco",
+          "stock": 4
+        },
+        {
+          "id": "",
+          "product_id FK": 3,
+          "SKU": "BD1926-166",
+          "color": "teal",
+          "stock": 5
+        },
+        {
+          "id": "",
+          "product_id FK": 4,
+          "SKU": "BD3612-536",
+          "color": "cherry",
+          "stock": 4
+        },
+        {
+          "id": "",
+          "product_id FK": 4,
+          "SKU": "BD3612-180",
+          "color": "sunshine",
+          "stock": 2
+        },
+        {
+          "id": "",
+          "product_id FK": 4,
+          "SKU": "BD3612-028",
+          "color": "blackout",
+          "stock": 3
+        },
+        {
+          "id": "",
+          "product_id FK": 4,
+          "SKU": "BD3612-156",
+          "color": "graphite",
+          "stock": 4
+        },
+        {
+          "id": "",
+          "product_id FK": 4,
+          "SKU": "BD3612-653",
+          "color": "wine",
+          "stock": 4
+        },
+        {
+          "id": "",
+          "product_id FK": 4,
+          "SKU": "BD3612-006",
+          "color": "tobacco",
+          "stock": 2
+        },
+        {
+          "id": "",
+          "product_id FK": 4,
+          "SKU": "BD3612-166",
+          "color": "teal",
+          "stock": 2
+        },
+        {
+          "id": "",
+          "product_id FK": 5,
+          "SKU": "BD7841-536",
+          "color": "cherry",
+          "stock": 4
+        },
+        {
+          "id": "",
+          "product_id FK": 5,
+          "SKU": "BD7841-170",
+          "color": "sunshine",
+          "stock": 5
+        },
+        {
+          "id": "",
+          "product_id FK": 5,
+          "SKU": "BD7841-028",
+          "color": "blackout",
+          "stock": 6
+        },
+        {
+          "id": "",
+          "product_id FK": 5,
+          "SKU": "BD7841-156",
+          "color": "graphite",
+          "stock": 7
+        },
+        {
+          "id": "",
+          "product_id FK": 5,
+          "SKU": "BD7841-653",
+          "color": "wine",
+          "stock": 4
+        },
+        {
+          "id": "",
+          "product_id FK": 5,
+          "SKU": "BD7841-006",
+          "color": "tobacco",
+          "stock": 4
+        },
+        {
+          "id": "",
+          "product_id FK": 5,
+          "SKU": "BD7841-166",
+          "color": "teal",
+          "stock": 8
+        },
+        {
+          "id": "",
+          "product_id FK": 6,
+          "SKU": "BD2142-536",
+          "color": "cherry",
+          "stock": 9
+        },
+        {
+          "id": "",
+          "product_id FK": 6,
+          "SKU": "BD2142-170",
+          "color": "sunshine",
+          "stock": 6
+        },
+        {
+          "id": "",
+          "product_id FK": 6,
+          "SKU": "BD2142-028",
+          "color": "blackout",
+          "stock": 4
+        },
+        {
+          "id": "",
+          "product_id FK": 6,
+          "SKU": "BD2142-156",
+          "color": "graphite",
+          "stock": 4
+        },
+        {
+          "id": "",
+          "product_id FK": 6,
+          "SKU": "BD2142-653",
+          "color": "wine",
+          "stock": 5
+        },
+        {
+          "id": "",
+          "product_id FK": 6,
+          "SKU": "BD2142-006",
+          "color": "tobacco",
+          "stock": 5
+        },
+        {
+          "id": "",
+          "product_id FK": 6,
+          "SKU": "BD2142-166",
+          "color": "teal",
+          "stock": 6
+        },
+        {
+          "id": "",
+          "product_id FK": 7,
+          "SKU": "BD5785-536",
+          "color": "cherry",
+          "stock": 10
+        },
+        {
+          "id": "",
+          "product_id FK": 7,
+          "SKU": "BD5785-170",
+          "color": "sunshine",
+          "stock": 10
+        },
+        {
+          "id": "",
+          "product_id FK": 7,
+          "SKU": "BD5785-028",
+          "color": "blackout",
+          "stock": 4
+        },
+        {
+          "id": "",
+          "product_id FK": 7,
+          "SKU": "BD5785-156",
+          "color": "graphite",
+          "stock": 9
+        },
+        {
+          "id": "",
+          "product_id FK": 7,
+          "SKU": "BD5785-653",
+          "color": "wine",
+          "stock": 6
+        },
+        {
+          "id": "",
+          "product_id FK": 7,
+          "SKU": "BD5785-006",
+          "color": "tobacco",
+          "stock": 15
+        },
+        {
+          "id": "",
+          "product_id FK": 7,
+          "SKU": "BD5785-166",
+          "color": "teal",
+          "stock": 7
+        }
+       ],
+       "order items": [
+        {
+            "id": "",
+            "SKU_id FK": "",
+            "order_id FK": "",
+            "quantity": ""
+        }
+       ],
+       "orders": [
+        {   "id": "",
+            "customer_id FK": "",
+            "paid/unpaid": "",
+            "status": "" 
+        }
+
+       ],
+       "customers": [
+        {
+            "id": "",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "password": "",
+            "address": ""
+        }
+
+       ]
+}
