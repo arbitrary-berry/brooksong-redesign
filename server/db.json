@@ -380,32 +380,5 @@
           "color": "teal",
           "stock": 7
         }
-       ],
-       "order items": [
-        {
-            "id": "",
-            "SKU_id FK": "",
-            "order_id FK": "",
-            "quantity": ""
-        }
-       ],
-       "orders": [
-        {   "id": "",
-            "customer_id FK": "",
-            "paid/unpaid": "",
-            "status": "" 
-        }
-
-       ],
-       "customers": [
-        {
-            "id": "",
-            "first_name": "",
-            "last_name": "",
-            "email": "",
-            "password": "",
-            "address": ""
-        }
-
        ]
 }
