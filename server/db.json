@@ -5,77 +5,84 @@
             "name": "megan bag",
             "price": "$340",
             "description": "An everyday slouchy shoulder bag to have all you need at your fingertips. Natural edge flap makes every bag one-of-a-kind.",
-            "photo1": "",
-            "photo2": "",
-            "photo3": "",
-            "photo4": "",
-            "photo5": ""
+            "photo1": "client/src/images/Brooksong_Design_Megan_bag_hero.jpg",
+            "photo2": "client/src/images/Brooksong_Design_Megan_bag_front.jpg",
+            "photo3": "client/src/images/Brooksong_Design_Megan_bag_back.jpg",
+            "photo4": "client/src/images/Brooksong_Design_Megan_bag_inner.jpg",
+            "photo5": "client/src/images/Brooksong_Design_Megan_bag_props.jpg",
+            "photo6": "client/src/images/Brooksong_Design_Megan_bag_swatches.jpg"
         },
         {
             "id": "",
             "name": "mini bag",
             "price": "$175",
             "description": "A crossbody bag for a night on the town or a gal who just needs the essentials. Natural edge flap makes every bag one-of-a-kind.",
-            "photo1": "",
-            "photo2": "",
-            "photo3": "",
-            "photo4": "",
-            "photo5": ""
+            "photo1": "client/src/images/Brooksong_Design_Mini_bag_hero.jpg",
+            "photo2": "client/src/images/Brooksong_Design_Mini_bag_front.jpg",
+            "photo3": "client/src/images/Brooksong_Design_Mini_bag_back.jpg",
+            "photo4": "client/src/images/Brooksong_Design_MIni_bag_inner.jpg",
+            "photo5": "client/src/images/Brooksong_Design_Mini_bag_props.jpg",
+            "photo6": "client/src/images/Brooksong_Design_Mini_bag_swatches.jpg"
         },
         {
             "id": "",
             "name": "christa clutch",
             "price": "$124",
             "description": "A classy zipper clutch that's versatile enough to carry on it's own or to slip into a larger bag. Comes with a removable wrist strap.",
-            "photo1": "",
-            "photo2": "",
-            "photo3": "",
-            "photo4": "",
-            "photo5": ""
+            "photo1": "client/src/images/Brooksong_Design_Christa_clutch_hero.jpg",
+            "photo2": "client/src/images/Brooksong_Design_Christa_clutch_front.jpg",
+            "photo3": "client/src/images/Brooksong_Design_Christa_clutch_back.jpg",
+            "photo4": "client/src/images/Brooksong_Design_Christa_clutch_props.jpg",
+            "photo5": "client/src/images/Brooksong_Design_Christa_clutch_strap.jpg",
+            "photo6": "client/src/images/Brooksong_Design_all_leather_swatches.jpg"
         },
         {
             "id": "",
             "name": "passport cover",
             "price": "$60",
             "description": "Carry your passports in style and keep all your important travel documents and cards together.",
-            "photo1": "",
-            "photo2": "",
-            "photo3": "",
-            "photo4": "",
-            "photo5": ""
+            "photo1": "client/src/images/Brooksong_Design_Passport_cover_hero1.jpg",
+            "photo2": "client/src/images/Brooksong_Design_Passport_cover_hero.jpg",
+            "photo3": "client/src/images/Brooksong_Design_Passport_cover_inner.jpg",
+            "photo4": "client/src/images/Brooksong_Design_Passport_cover_props.jpg",
+            "photo5": "client/src/images/Brooksong_Design_Passport_cover_connector.jpg",
+            "photo6": "client/src/images/Brooksong_Design_all_leather_swatches.jpg"
         },
         {
             "id": "",
             "name": "mia snap wallet",
             "price": "$50",
             "description": "A pocket-sized wallet, perfect for those times when you don't want to carry a bag.",
-            "photo1": "",
-            "photo2": "",
-            "photo3": "",
-            "photo4": "",
-            "photo5": ""
+            "photo1": "client/src/images/Brooksong_Design_Mia_Snap_wallet_hero.jpg",
+            "photo2": "client/src/images/Brooksong_Design_Mia_Snap_wallet_front.jpg",
+            "photo3": "client/src/images/Brooksong_Design_Mia_Snap_wallet_back.jpg",
+            "photo4": "client/src/images/Brooksong_Design_Mia_Snap_wallet_inner.jpg",
+            "photo5": "client/src/images/Brooksong_Design_Mia_Snap_wallet_props.JPG",
+            "photo6": "client/src/images/Brooksong_Design_all_leather_swatches.jpg"
         },
         {
             "id": "",
             "name": "big tassel keychain",
             "price": "$18",
             "description": "A little pizzazz to add to your keys or bag. 5 1/2\" long",
-            "photo1": "",
-            "photo2": "",
-            "photo3": "",
-            "photo4": "",
-            "photo5": ""
+            "photo1": "client/src/images/Brooksong_Design_Big_tassel_keychain_hero.jpg",
+            "photo2": "client/src/images/Brooksong_Design_Big_tassel_keychain_hero2.jpg",
+            "photo3": "client/src/images/Brooksong_Design_Big_tassel_keychain_onbag.jpg",
+            "photo4": "client/src/images/Brooksong_Design_tassel_keychain_both.JPG",
+            "photo5": "client/src/images/Brooksong_Design_Big_tassel_keychain_props.jpg",
+            "photo6": "client/src/images/Brooksong_Design_all_leather_swatches.jpg"
         },
         {
             "id": "",
             "name": "mini tassel keychain",
             "price": "$14",
             "description": "A little pizzazz to add to your keys or bag. 2 3/4\" long",
-            "photo1": "",
-            "photo2": "",
-            "photo3": "",
-            "photo4": "",
-            "photo5": ""
+            "photo1": "client/src/images/Brooksong_Design_Mini_tassel_keychain_hero.jpg",
+            "photo2": "client/src/images/Brooksong_Design_Mini_tassel_keychain_hero2.jpg",
+            "photo3": "client/src/images/Brooksong_Design_Mini_tassel_keychain_hero3.jpg",
+            "photo4": "client/src/images/Brooksong_Design_tassel_keychain_both.JPG",
+            "photo5": "client/src/images/Brooksong_Design_Mini_tassel_keychain_props.jpg",
+            "photo6": "client/src/images/Brooksong_Design_all_leather_swatches.jpg"
         }
    ],
    "SKUs": [
@@ -380,5 +387,18 @@
           "color": "teal",
           "stock": 7
         }
-       ]
+       ],
+      "customer": [
+        {
+          "id": "",
+          "first_name": "",
+          "last_name": "",
+          "email": "alyssa.brooksong@gmail.com",
+          "username": "alyssa1234",
+          "password": "Password1234!",
+          "address": "1234 Main Street Anytown, State, 20000"
+
+        }
+
+      ]
 }

@@ -1,17 +1,17 @@
 <mxfile host="65bd71144e">
     <diagram id="OU67Lc1jmzJOTfQDyrkF" name="Page-1">
-        <mxGraphModel dx="1020" dy="564" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="527" dy="378" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="2" value="customer" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="10" y="10" width="140" height="210" as="geometry"/>
+                    <mxGeometry x="10" y="10" width="140" height="230" as="geometry"/>
                 </mxCell>
                 <mxCell id="4" value="id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="2" vertex="1">
                     <mxGeometry y="26" width="140" height="26" as="geometry"/>
                 </mxCell>
-                <mxCell id="5" value="first_name&lt;br&gt;&lt;br&gt;last_name&lt;br&gt;&lt;br&gt;email&lt;br&gt;&lt;br&gt;password&lt;br&gt;&lt;br&gt;address" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="2" vertex="1">
-                    <mxGeometry y="52" width="140" height="158" as="geometry"/>
+                <mxCell id="5" value="first_name&lt;br&gt;&lt;br&gt;last_name&lt;br&gt;&lt;br&gt;email&lt;br&gt;&lt;br&gt;username&lt;br&gt;&lt;br&gt;password&lt;br&gt;&lt;br&gt;address" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="2" vertex="1">
+                    <mxGeometry y="52" width="140" height="178" as="geometry"/>
                 </mxCell>
                 <mxCell id="6" value="product" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;" parent="1" vertex="1">
                     <mxGeometry x="690" y="30" width="140" height="140" as="geometry"/>
