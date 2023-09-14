@@ -12,17 +12,35 @@ from sqlalchemy.exc import IntegrityError
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models import Products, SKUs, OrderItems, Orders, Customers
+from models import Product, SKU, OrderItem, Order, Customer
 
 # Views go here!
 
-@app.route('/')
-def index():
-    return '<h1>Phase 4 Project Server</h1>'
+class Products(Resource):
+    def get(self):
+        products = [product.to_dict() for product in Product.query.all()]
+        return make_response(products, 200)
 
+class ProductsById(Resource):
+    def get(self, id):
+        product = Product.query.filter_by(id=id).first()
+        if not product:
+            raise ValueError("Could not find product")
+        return make_response(product.to_dict(), 200)
 
-if __name__ == '__main__':
-    app.run(port=5555, debug=True)
+class CustomerById(Resource):
+    def get(self, id):
+        customer = Customer.query.filter_by(id=id).first()
+        if not customer:
+            raise ValueError("Customer not found")
+        return make_response(customer.to_dict(), 200)
+    
+class OrderById(Resource):
+    def get(self, id):
+        order = Order.query.filter_by(id=id).first()
+        if not order:
+            raise ValueError("Order not found")
+        return make_response(order.to_dict(), 200)
 
 
 
@@ -31,7 +49,7 @@ class Signup(Resource):
     def post(self):
         req_json = request.get_json()
         try:
-            new_customer = Customers(
+            new_customer = Customer(
                 first_name=req_json["firstname"],
                 last_name=req_json["lastname"],
                 email=req_json["email"],
@@ -78,3 +96,11 @@ api.add_resource(Authorized, '/authorized')
 api.add_resource(Signup, "/signup")
 api.add_resource(Login, "/login")
 api.add_resource(Logout, '/logout')
+
+api.add_resource(Products, '/products')
+api.add_resource(ProductsById, '/products/<int:id>')
+api.add_resource(CustomerById, '/customer/<int:id>')
+api.add_resource(OrderById, '/order/<int:id>')
+
+if __name__ == '__main__':
+    app.run(port=5555, debug=True)

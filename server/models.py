@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 from config import db, bcrypt
 
 # Models go here!
-class Products(db.Model, SerializerMixin):
+class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -18,6 +18,53 @@ class Products(db.Model, SerializerMixin):
     photo3 = db.Column(db.String)
     photo4 = db.Column(db.String)
     photo5 = db.Column(db.String)
+
+skus = relationship('SKUs', backref='product')
+skus_proxy = association_proxy('skus', 'sku')
+    
+class SKU(db.Model, SerializerMixin):
+    __tablename__ = "skus"
+
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    sku = db.Column(db.String)
+    color = db.Column(db.String)
+    stock = db.Column(db.Integer)
+
+product = relationship('Products', backref='skus')
+
+class OrderItem(db.Model, SerializerMixin):
+    __tablename__ = "order items"
+
+    id = db.Column(db.Integer, primary_key=True)
+    sku_id = db.Column(db.Integer, db.ForeignKey('skus.id'))
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'))
+    quantity = db.Column(db.Integer)
+
+order = relationship('Orders', backref='order_items')
+sku = relationship('SKUs', backref='order_items')
+
+class Order(db.Model, SerializerMixin):
+    __tablename__ = "orders"
+
+    id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer)
+    paid_unpaid = db.Column(db.String)
+    status = db.Column(db.String)
+
+order_items = relationship('OrderItems', backref='order')
+order_items_proxy = association_proxy('order_items', 'sku')
+
+class Customer(db.Model, SerializerMixin):
+    __tablename__ = "customers"
+
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String)
+    last_name = db.Column(db.String)
+    email = db.Column(db.String)
+    username = db.Column(db.String)
+    password = db.Column(db.String)
+    address = db.Column(db.String)
 
     @validates("password")
     def validate_password(self, key, value):
@@ -48,53 +95,4 @@ class Products(db.Model, SerializerMixin):
     def check_password(self, plaintext_password):
  
         return bcrypt.check_password_hash(self._password, plaintext_password.encode('utf-8'))
-
-skus = relationship('SKUs', backref='product')
-skus_proxy = association_proxy('skus', 'sku')
-    
-class SKUs(db.Model, SerializerMixin):
-    __tablename__ = "skus"
-
-    id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
-    sku = db.Column(db.String)
-    color = db.Column(db.String)
-    stock = db.Column(db.Integer)
-
-product = relationship('Products', backref='skus')
-
-class OrderItems(db.Model, SerializerMixin):
-    __tablename__ = "order items"
-
-    id = db.Column(db.Integer, primary_key=True)
-    sku_id = db.Column(db.Integer, db.ForeignKey('skus.id'))
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'))
-    quantity = db.Column(db.Integer)
-
-order = relationship('Orders', backref='order_items')
-sku = relationship('SKUs', backref='order_items')
-
-class Orders(db.Model, SerializerMixin):
-    __tablename__ = "orders"
-
-    id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer)
-    paid_unpaid = db.Column(db.String)
-    status = db.Column(db.String)
-
-order_items = relationship('OrderItems', backref='order')
-order_items_proxy = association_proxy('order_items', 'sku')
-
-class Customers(db.Model, SerializerMixin):
-    __tablename__ = "customers"
-
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String)
-    last_name = db.Column(db.String)
-    email = db.Column(db.String)
-    username = db.Column(db.String)
-    password = db.Column(db.String)
-    address = db.Column(db.String)
-
-
 
