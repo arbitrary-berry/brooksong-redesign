@@ -388,17 +388,15 @@
           "stock": 7
         }
        ],
-      "customer": [
+      "customers": [
         {
           "id": "",
-          "first_name": "",
-          "last_name": "",
+          "first_name": "Alyssa",
+          "last_name": "Essman",
           "email": "alyssa.brooksong@gmail.com",
           "username": "alyssa1234",
-          "password": "Password1234!",
+          "_password": "Password1234!",
           "address": "1234 Main Street Anytown, State, 20000"
-
         }
-
       ]
 }

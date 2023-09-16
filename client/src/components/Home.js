@@ -1,17 +1,57 @@
 import React from "react";
-import Header from "./Header";
-import Footer from "./Footer";
+import Grid from '@mui/material/Grid';
+
+const containerStyle ={
+  width: '100%',
+  height: 'auto',
+};
+const containerStyle2 ={
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
+const imageStyle = {
+  maxwidth: '100px',
+  height: 'auto'
+}
 
 function Home() {
 
   return (
-    <div>
-      <Header />
-        Home
-        Should i add a card for the products so it just shows the first 3? 
-        but make cards of all of thehm? so that
-        s how they display on teh shop page?
-      <Footer />
+    <div >
+      <img src="/images/Mini_coffee_styled.jpg" alt="brooksong design mini bag with newspaper and coffee" style={containerStyle}/>
+      <div style={containerStyle2}>
+        <h1>handmade italian leather accessories</h1>
+      </div>
+      <div style={containerStyle2}>
+          <h1>just for you</h1>
+      </div>
+      <div>
+        <Grid container spacing ={2}>
+        <Grid item xs={8}>
+          <img 
+          src="/images/Mini_coffee_styled.jpg" 
+          alt="brooksong design mini bag with newspaper and coffee" 
+          style={imageStyle} 
+          />
+          </Grid>
+        <Grid item xs={8}>
+          <img 
+          src="/images/Mini_coffee_styled.jpg" 
+          alt="brooksong design mini bag with newspaper and coffee" 
+          style={imageStyle}
+          />
+          </Grid>
+        <Grid item xs={8}>
+          <img 
+          src="/images/Mini_coffee_styled.jpg" 
+          alt="brooksong design mini bag with newspaper and coffee" 
+          style={imageStyle}
+          />
+          </Grid>
+        </Grid>
+      </div>
     </div>
   );
 }

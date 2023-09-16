@@ -34,7 +34,7 @@ class SKU(db.Model, SerializerMixin):
 product = relationship('Products', backref='skus')
 
 class OrderItem(db.Model, SerializerMixin):
-    __tablename__ = "order items"
+    __tablename__ = "order_items"
 
     id = db.Column(db.Integer, primary_key=True)
     sku_id = db.Column(db.Integer, db.ForeignKey('skus.id'))
@@ -59,12 +59,12 @@ class Customer(db.Model, SerializerMixin):
     __tablename__ = "customers"
 
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String)
-    last_name = db.Column(db.String)
-    email = db.Column(db.String)
-    username = db.Column(db.String)
-    password = db.Column(db.String)
-    address = db.Column(db.String)
+    first_name = db.Column(db.String(255))
+    last_name = db.Column(db.String(255))
+    email = db.Column(db.String(255), unique=True)
+    username = db.Column(db.String(255), unique=True)
+    _password = db.Column(db.String(60))
+    address = db.Column(db.String(255))
 
     @validates("password")
     def validate_password(self, key, value):

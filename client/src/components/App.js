@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import { Switch, Route } from "react-router-dom";
-// import { useCustomerAuth } from "../context/CustomerAuthProvider";
+import { CustomerAuthContext } from "../context/CustomerAuthProvider";
 import Home from './Home';
 import Profile from './Profile';
 import Shop from './Shop';
@@ -17,18 +17,20 @@ import BigTasselKeychain from "./BigTasselKeychain";
 import MiniTasselKeychain from "./MiniTasselKeychain";
 import Cart from "./Cart";
 import About from "./About"
+import Header from "./Header";
+import Footer from "./Footer";
 
 
 function App() {
-  // const {checkAuthorized} = useCustomerAuth();
+  const {checkAuthorized} = useContext(CustomerAuthContext);
 
-  // useEffect(() => {
-  //   checkAuthorized();
-  // }, [])
+  useEffect(() => {
+    checkAuthorized();
+  }, [])
 
   return (
   <div>
-    <Home />
+    <Header />
       <Switch>
         <Route path="/customer/:id" ><Profile /></Route>
         <Route path="/about"><About /></Route>
@@ -47,6 +49,7 @@ function App() {
         <Route path="/cart"><Cart /></Route>
         <Route path="/"><Home /></Route>
       </Switch>
+    <Footer />
       </div>
   )
 }

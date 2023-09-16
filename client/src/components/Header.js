@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { styled, alpha } from '@mui/material/styles';
-import { useCustomerAuth  } from "../context/CustomerAuthProvider";
+import React, { useState, useContext } from "react";
+import { styled } from '@mui/material/styles';
+import { CustomerAuthContext  } from "../context/CustomerAuthProvider";
+import { NavLink } from 'react-router-dom';
 import Login from './Login';
 import Signup from './Signup';
 import AppBar from '@mui/material/AppBar';
@@ -11,24 +12,35 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 
+
 const StyledButton = styled(Button)(({ theme }) => ({
-    backgroundColor: 'black', // Green pastel color
+    backgroundColor: 'black', 
     color: theme.palette.common.white,
     borderRadius: "15%",
     margin: "5px",
     '&:hover': {
-      backgroundColor: '#7bc68c', // Slightly darker shade on hover
+      backgroundColor: 'white', 
+      color: 'black',
     },
   }));
 
-function Header() {
+const TransparentAppBar = styled(AppBar)(({ theme }) => ({
+    backgroundColor: "transparent",
+    boxShadow: "none",
+}));
 
-// add logo
+const containerStyle ={
+  display: 'flex',
+  alignItems: 'center',
+};
+
+
+
+function Header() {
 
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setSignupModalOpen] = useState(false);
-  const { customer, handleLogout } = useCustomerAuth() ;
-
+  const { customer, handleLogout } = useContext(CustomerAuthContext) ;
 
   const handleLoginModalOpen = () => {
     setLoginModalOpen(true);
@@ -48,10 +60,17 @@ function Header() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <TransparentAppBar position="static">
+        <div style={containerStyle}>
+        <NavLink to='/'>
+          <div>
+          <img src="/images/brooksongdesignlogofromwebsite.jpg" alt="brooksong design logo"  width="400px" />
+          </div>
+        </NavLink>
         <Toolbar>
           <div>
-            {customer ? (
+          {customer !== undefined ? (
+            customer ? (
               <StyledButton variant="outlined" onClick={handleLogout}>
                 Logout
               </StyledButton>
@@ -76,10 +95,12 @@ function Header() {
                   </DialogContent>
                 </Dialog>
               </>
-            )}
+              )
+            ) : null}
           </div>
         </Toolbar>
-      </AppBar>
+        </div>
+      </TransparentAppBar>
     </Box>
   );
 }

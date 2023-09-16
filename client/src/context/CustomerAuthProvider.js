@@ -1,11 +1,11 @@
 // CustomerAuthProvider.js
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useState } from 'react';
 
 const CustomerAuthContext = createContext();
 
-export const useCustomerAuth = () => {
-  return useContext(CustomerAuthContext);
-};
+// export const useCustomerAuth = () => {
+//   return useContext(CustomerAuthContext);
+// };
 
 const CustomerAuthProvider = ({ children }) => {
   const [customer, setCustomer] = useState(null);
@@ -82,4 +82,4 @@ const CustomerAuthProvider = ({ children }) => {
   );
 };
 
-export default CustomerAuthProvider;
+export {CustomerAuthContext, CustomerAuthProvider};

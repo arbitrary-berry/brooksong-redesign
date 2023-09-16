@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import Header from "./Header";
 import AccountDetails from "./AccountDetails";
 import { useParams } from "react-router-dom"; // Import useParams to get user ID
-import { useCustomerAuth } from "../context/CustomerAuthProvider";
+import { CustomerAuthContext } from "../context/CustomerAuthProvider";
 
 const Profile = () => {
-  const { customer, setCustomer } = useCustomerAuth(); 
+  const { customer, setCustomer } = useContext(CustomerAuthContext); 
   const { id } = useParams(); 
 
   useEffect(() => {
