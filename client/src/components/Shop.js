@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom/cjs/react-router-dom";
 
 function Shop() {
+  const [product, setProducts] = useState([])
+
+  useEffect(() => {
+      fetch("http://localhost:3000/products")
+          .then(res => res.json())
+          .then((products) => setProducts(products))
+  }, [])
 
 // fetch all products
 
