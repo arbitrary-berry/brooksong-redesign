@@ -31,18 +31,31 @@ import { useParams } from 'react-router-dom/cjs/react-router-dom';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import "../index.css";
 
+
 function ProductDetail() {
-  const [products, setProducts] = useState([]);
+  const [productObj, setProductObj] = useState(null);
   const { id } = useParams()
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [color, setColor] = useState(true);
   const [quantity, setQuantity] = useState(false);
+
   const carouselRef = useRef(null);
-  const { addToCart} = useCart();
+  const { addToCart } = useCart();
+
+  const uniqueColors = [...new Set(productObj?.skus?.map((sku => sku.color)))];
+
+  // const colorRadioButtons = uniqueColors.map((color) => (
+  //   <FormControlLabel
+  //     key={color}
+  //     value={color}
+  //     control={<Radio onChange={handleColorChange} />}
+  //     label={color}
+  //   />
+  // ));
 
   const handleColorChange = (e) => {
-    setColor(e.target.checked)
+    setColor(e.target.value)
   }
 
   const handleQuantityChange = (e) => {
@@ -50,11 +63,11 @@ function ProductDetail() {
   }
 
   const handleCarouselPrev = () => {
-    setSelectedImageIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length);
+    setSelectedImageIndex((prevIndex) => (prevIndex - 1 + productObj.length) % productObj.length);
   };
   
   const handleCarouselNext = () => {
-    setSelectedImageIndex((prevIndex) => (prevIndex + 1) % products.length);
+    setSelectedImageIndex((prevIndex) => (prevIndex + 1) % productObj.length);
   };
 
   const openLightbox = (index) => {
@@ -68,28 +81,31 @@ function ProductDetail() {
 
   function handleSubmit(e){
     e.preventDefault()
+    console.log(productObj)
 
-    const selectedProduct = products.find((product) => product.id === id);
+    console.log('Selected Product: selectedProduct');
 
-    fetch('http://localhost:3000/order_items', {
+    fetch('/order_items', {
       method: 'POST',
       headers: { 'Content-Type' : 'application/json' },
       body: JSON.stringify({
-        name: selectedProduct.name,
-        price: selectedProduct.price,
+        product_id: productObj.id,
         color, 
         quantity,
-    })
+    }),
     })
     .then(response => response.json())
-    .then(newOrderItem => { 
-      addToCart({    
-        name: selectedProduct.name,
-        price: selectedProduct.price,
-        color, 
-        quantity,
-    });
-    })
+    .then(console.log)
+    // .then(newOrderItem => { 
+    //   console.log('New Order Item:', newOrderItem);
+    //   addToCart({    
+    //     product_id: product.id,
+    //     color, 
+    //     quantity,
+    // });
+    // })
+    // .catch((error) =>
+    //   console.error('Error:', error))
   }
 
   const customCarouselStyles = {
@@ -118,26 +134,12 @@ function ProductDetail() {
   }));
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'ArrowLeft') {
-        handleCarouselPrev();
-      } else if (e.key === 'ArrowRight') {
-        handleCarouselNext();
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
-
-  useEffect(() => {
-    fetch("/products")
+    fetch(`/products/${id}`)
       .then((res) => res.json())
-      .then((data) => setProducts(data))
-      .catch((error) => console.error("Error fetching products:", error));
+      .then((data) => setProductObj(data))
+      .catch((error) => console.error("Error fetching productObj:", error));
   }, []);
+  if (!productObj) return (<h1>loading</h1>)
   
   return (
     <div>
@@ -145,31 +147,27 @@ function ProductDetail() {
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           <Grid item xs={12} md={6}>
           <ImageList variant="masonry" cols={2} gap={8}>
-              {products.map((product, index) => (       
-                <ImageListItem key={product.name}>
-                  {Array.from({ length:5}, (_, i) =>
-                  <img
-                    key={`photo-${i}`}
-                    src={`${product[`photo${i + 1}`]}?w=248&fit=crop&auto=format`}
-                    srcSet={`${product[`photo${i + 1}`]}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                    alt={`${i + 1}`}
-                    onClick={() => openLightbox(index)}
-                  />
-                  )}
-                </ImageListItem>
-              ))}
+    {Array.from({ length: 5 }, (_, i) => (
+      <ImageListItem key={`photo-${i + 1}`}>
+        <img
+          src={`${productObj[`photo${i + 1}`]}?w=500&fit=crop&auto=format`}
+          srcSet={`${productObj[`photo${i + 1}`]}?w=500&fit=crop&auto=format&dpr=2 2x`}
+          alt={`${i + 1}`}
+          onClick={() => openLightbox(i)}
+        />
+      </ImageListItem>
+    ))}
             </ImageList>
           </Grid>
           <Grid item xs={12} md={6}>
-            {products.map((product, index) =>
             <Card sx={{ maxWidth: 350, boxShadow: 'none' }}>
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  <h1>{product.name}</h1>
-                  <p><h2>{product.price}</h2></p>
+                  <h1>{productObj.name}</h1>
+                  <h2>{productObj.price}</h2>
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  <p>{product.description}</p>
+                  {productObj.description}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -177,15 +175,18 @@ function ProductDetail() {
                   <FormLabel id="demo-radio-buttons-group-label">color</FormLabel>
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue="red"
+                      defaultValue={productObj.skus[0].color} // Set the default color from the first SKU
                       name="radio-buttons-group"
+                      onChange={handleColorChange}
                     >
-                      <FormControlLabel value="red" control={<Radio
-                        onChange={handleColorChange}
-                        onSubmit={handleSubmit}/>} label="red" />
-                      <FormControlLabel value="grey" control={<Radio />} label="grey" />
-                      <FormControlLabel value="yellow" control={<Radio />} label="yellow" />
-                      <FormControlLabel value="black" control={<Radio />} label="black" />
+                      {productObj.skus.map((sku) => (
+                        <FormControlLabel
+                          key={sku.id}
+                          value={sku.color}
+                          control={<Radio />}
+                          label={sku.color}
+                        />
+                      ))}
                     </RadioGroup>
                   </FormControl>
                   <FormControl sx={{ m: 1, minWidth: 80 }}>
@@ -215,11 +216,15 @@ function ProductDetail() {
                     <Typography>material</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Typography>
-                      <p>All of the bags and accessories are made with love in a small attic studio in Portland, Oregon. I use 100% high-quality Italian leather, strong YKK zippers, and solid brass hardware. If you don’t see the color you want, let me know and I can do a custom order.</p>
-                      <p>Since leather is a natural resource, not all bags will be identical. Due to normal variances in dye lots and screen resolutions, the color of the product you receive may vary slightly.</p>
-                      <p>Each brooksong design is handmade and thus unique!</p>
-                    </Typography>
+                  <Typography  variant="body1">
+                    All of the bags and accessories are made with love in a small attic studio in Portland, Oregon. I use 100% high-quality Italian leather, strong YKK zippers, and solid brass hardware. If you don’t see the color you want, let me know and I can do a custom order.
+                  </Typography>
+                  <Typography variant="body1">
+                    Since leather is a natural resource, not all bags will be identical. Due to normal variances in dye lots and screen resolutions, the color of the product you receive may vary slightly.
+                  </Typography> 
+                  <Typography>
+                    Each brooksong design is handmade and thus unique!
+                  </Typography>
                   </AccordionDetails>
                 </Accordion>
                 <Accordion elevation={0}>
@@ -265,7 +270,6 @@ function ProductDetail() {
                   </AccordionDetails>
                 </Accordion>
               </Card>
-            )}
             </Grid>
             </Grid>
             <h1>10% of profits go to destigmatizing mental illness and the suicide prevention lifeline</h1>
@@ -278,48 +282,45 @@ function ProductDetail() {
                 dynamicHeight={false}
                 infiniteLoop={true}
                 showThumbs={false}
-                renderArrowPrev={(onClickHandler, hasPrev, label) =>
-                  hasPrev && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        handleCarouselPrev();
-                        onClickHandler();
-                      }}
-                      title={label}
-                      style={{ ...customCarouselStyles, left: '0' }}
-                    >
-                      <ArrowBackIcon />
-                    </button>
-                  )
-                }
-                renderArrowNext={(onClickHandler, hasNext, label) =>
-                  hasNext && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        handleCarouselNext();
-                        onClickHandler();
-                      }}
-                      title={label}
-                      style={{ ...customCarouselStyles, right: '0' }}
-                    >
-                      <ArrowForwardIcon />
-                    </button>
-                  )
-                }
+                style={customCarouselStyles}
                 showStatus={false}
                 ref={carouselRef}
               >
-                {products.map((product) => (
-                  <div key={product.img} style={{ display: 'flex', justifyContent: 'center' }}>
-                    <img
-                      src={product.img}
-                      alt="Enlarged"
-                      style={{ maxHeight: '80vh', width: 'auto' }}
-                    />
-                  </div>
-                ))}
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <img
+                    src={productObj.photo1}
+                    alt="product"
+                    style={{ maxHeight: '80vh', width: 'auto' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <img
+                    src={productObj.photo2}
+                    alt="product"
+                    style={{ maxHeight: '80vh', width: 'auto' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <img
+                    src={productObj.photo3}
+                    alt="product"
+                    style={{ maxHeight: '80vh', width: 'auto' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <img
+                    src={productObj.photo4}
+                    alt="product"
+                    style={{ maxHeight: '80vh', width: 'auto' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <img
+                    src={productObj.photo5}
+                    alt="product"
+                    style={{ maxHeight: '80vh', width: 'auto' }}
+                  />
+                </div>
               </Carousel>
             </DialogContent>
           </Dialog>

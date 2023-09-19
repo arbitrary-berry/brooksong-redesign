@@ -19,7 +19,8 @@ class Product(db.Model, SerializerMixin):
     photo4 = db.Column(db.String)
     photo5 = db.Column(db.String)
 
-skus = relationship('SKU', backref='product')
+    skus = relationship('SKU', backref='product')
+    serialize_rules = ('-skus.product',)
     
 class SKU(db.Model, SerializerMixin):
     __tablename__ = "skus"
@@ -30,7 +31,7 @@ class SKU(db.Model, SerializerMixin):
     color = db.Column(db.String)
     stock = db.Column(db.Integer)
 
-order_items = relationship('OrderItem', backref='sku')
+    order_items = relationship('OrderItem', backref='sku')
 
 class OrderItem(db.Model, SerializerMixin):
     __tablename__ = "order_items"
@@ -48,8 +49,8 @@ class Order(db.Model, SerializerMixin):
     paid_unpaid = db.Column(db.String)
     status = db.Column(db.String)
 
-order_items = relationship('OrderItem', backref='order', cascade='delete')
-order_items_proxy = association_proxy('order_items', 'sku')
+    order_items = relationship('OrderItem', backref='order', cascade='delete')
+    order_items_proxy = association_proxy('order_items', 'sku')
 
 class Customer(db.Model, SerializerMixin):
     __tablename__ = "customers"
@@ -61,6 +62,9 @@ class Customer(db.Model, SerializerMixin):
     username = db.Column(db.String(255), unique=True)
     _password = db.Column(db.String(60))
     address = db.Column(db.String(255))
+
+    # orders = relationship('Order', backref='order')
+    # filter for unpaid order
 
     @validates("password")
     def validate_password(self, key, value):

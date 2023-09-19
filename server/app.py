@@ -31,6 +31,13 @@ class ProductsById(Resource):
         if not product:
             raise ValueError("Could not find product")
         return make_response(product.to_dict(), 200)
+    
+class SKUsById(Resource):
+    def get(self, id):
+        SKU = SKU.query.filter_by(id=id).first()
+        if not SKU:
+            raise ValueError("Could not find product")
+        return make_response(SKU.to_dict(), 200)
 
 class CustomerById(Resource):
     def get(self, id):
@@ -38,6 +45,11 @@ class CustomerById(Resource):
         if not customer:
             raise ValueError("Customer not found")
         return make_response(customer.to_dict(), 200)
+
+class OrderItems(Resource):
+    def post(self):
+        req_json = request.get_json()
+        print(req_json)
     
 class OrderById(Resource):
     def get(self, id):
@@ -162,7 +174,9 @@ api.add_resource(Logout, '/logout')
 
 api.add_resource(Products, '/products')
 api.add_resource(ProductsById, '/products/<int:id>')
+api.add_resource(SKUsById, '/skus/<int:id>')
 api.add_resource(CustomerById, '/customer/<int:id>')
+api.add_resource(OrderItems, '/order_items')
 api.add_resource(OrderById, '/order/<int:id>')
 
 if __name__ == '__main__':

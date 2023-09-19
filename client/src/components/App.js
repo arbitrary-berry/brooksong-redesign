@@ -33,8 +33,8 @@ function App() {
         <Route path="/story" ><Story /></Route>
         <Route path="/donation"><Donation /></Route>
         <Route path="/faqs"><FAQs /></Route>
-        <Route path="/products"></Route>
         <Route path="/products/:id"><ProductDetail /></Route>
+        <Route path="/products"></Route>
         <Route path="/cart"><Cart /></Route>
         <Route path="/"><Home /></Route>
       </Switch>
