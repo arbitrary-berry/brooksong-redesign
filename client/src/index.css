@@ -5,3 +5,16 @@
   --text: hsla(0, 0%, 100%, 0.88);
 }
 
+/* Target the carousel breadcrumbs */
+.carousel .control-dots .dot {
+  width: 10px; /* Adjust the width and height to your preference */
+  height: 10px;
+  border-radius: 50%; /* Makes it a circle */
+  background-color: transparent; /* Initial state: not filled */
+  margin: 0 5px; /* Adjust spacing between dots as needed */
+}
+
+/* Style the filled circle when active */
+.carousel .control-dots .dot.selected {
+  background-color: black; /* Change to your desired fill color */
+}

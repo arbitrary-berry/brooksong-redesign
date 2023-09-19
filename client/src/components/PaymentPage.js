@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "./CheckoutForm";
-import "./PaymentPage.css";
+import "../PaymentPage.css";
 
 export default function PaymentPage() {
 
-  const [userID, setUserId] = useState("");
+  const [customerID, setCustomerId] = useState("");
   const [clientSecret, setClientSecret] = useState("");
 
   const stripePromise = loadStripe(
@@ -22,7 +22,7 @@ export default function PaymentPage() {
         },
         body: JSON.stringify({
           items: [{ id: "Premium" }],
-          customer: userID,
+          customer: customerID,
         }),
       });
 
@@ -39,7 +39,7 @@ export default function PaymentPage() {
 
   React.useEffect(() => {
     loadData();
-  }, [userID]);
+  }, [customerID]);
 
   const appearance = {
     theme: "night",

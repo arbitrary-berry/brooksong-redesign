@@ -19,8 +19,7 @@ class Product(db.Model, SerializerMixin):
     photo4 = db.Column(db.String)
     photo5 = db.Column(db.String)
 
-skus = relationship('SKUs', backref='product')
-skus_proxy = association_proxy('skus', 'sku')
+skus = relationship('SKU', backref='product')
     
 class SKU(db.Model, SerializerMixin):
     __tablename__ = "skus"
@@ -31,7 +30,7 @@ class SKU(db.Model, SerializerMixin):
     color = db.Column(db.String)
     stock = db.Column(db.Integer)
 
-product = relationship('Products', backref='skus')
+order_items = relationship('OrderItem', backref='sku')
 
 class OrderItem(db.Model, SerializerMixin):
     __tablename__ = "order_items"
@@ -41,9 +40,6 @@ class OrderItem(db.Model, SerializerMixin):
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id'))
     quantity = db.Column(db.Integer)
 
-order = relationship('Orders', backref='order_items')
-sku = relationship('SKUs', backref='order_items')
-
 class Order(db.Model, SerializerMixin):
     __tablename__ = "orders"
 
@@ -52,7 +48,7 @@ class Order(db.Model, SerializerMixin):
     paid_unpaid = db.Column(db.String)
     status = db.Column(db.String)
 
-order_items = relationship('OrderItems', backref='order')
+order_items = relationship('OrderItem', backref='order', cascade='delete')
 order_items_proxy = association_proxy('order_items', 'sku')
 
 class Customer(db.Model, SerializerMixin):

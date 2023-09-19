@@ -395,7 +395,7 @@
           "last_name": "Essman",
           "email": "alyssa.brooksong@gmail.com",
           "username": "alyssa1234",
-          "_password": "Password1234!",
+          "password": "Password1234!",
           "address": "1234 Main Street Anytown, State, 20000"
         }
       ]

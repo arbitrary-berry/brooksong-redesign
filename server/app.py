@@ -75,7 +75,7 @@ class Login(Resource):
         password = req_json['password']
 
         # Retrieve the customer instance using the provided username
-        customer = customer.query.filter_by(username=username).first()
+        customer = Customer.query.filter_by(username=username).first()
 
         if customer and customer.check_password(password):
             session['customer_id'] = customer.id
@@ -90,7 +90,7 @@ class Logout(Resource):
 
 class Authorized(Resource):
     def get(self):
-        customer = customer.query.filter(customer.id == session.get('customer_id')).first()
+        customer = Customer.query.filter(Customer.id == session.get('customer_id')).first()
         if customer:
             return make_response(customer.to_dict(), 200)
         else:

@@ -1,15 +1,10 @@
 import * as React from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 
 function FAQs() {
   return (
     <div>
           <div>
-        <h1>FAQs</h1>
         <h2>FREE SHIPPING</h2>
         <p>Please allow 3+ weeks for production. You will be emailed tracking information once the product is made.</p>
         <p>Shipping is free via USPS. I am currently only shipping within the United States.</p>
@@ -25,45 +20,6 @@ function FAQs() {
         <p>A return shipping quote and label will be provided once your return has been accepted. The cost of return shipping will be considered your responsibility and deducted from your refund.</p>
         <p>In the unlikely event that your item arrives damaged or your order is inaccurate, a return shipping label will be provided and I will send you a replacement at no additional cost.</p>
     </div>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>Accordion 1</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2a-content"
-          id="panel2a-header"
-        >
-          <Typography>Accordion 2</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion disabled>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel3a-content"
-          id="panel3a-header"
-        >
-          <Typography>Disabled Accordion</Typography>
-        </AccordionSummary>
-      </Accordion>
     </div>
   );
 }

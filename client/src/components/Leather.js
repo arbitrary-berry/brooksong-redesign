@@ -1,10 +1,15 @@
 import React from "react";
 
 function Leather() {
-
+  
+  const containerStyle ={
+    width: '100%',
+    height: 'auto',
+  };
+  
   return (
     <div>
-        Leather
+        <img src="/images/leather_swatches.jpg" alt='leather swatches on a mental loop' style={containerStyle}/>
         <h1>THE LEATHER</h1>
         <p>The leather is purchased directly from an award-winning Italian tannery that sources hides from the beef industry. Ecologically friendly and sustainable business practices start with the leather supplier and run through the entire business.</p>
         <p>The hides are chrome-tanned, making them supple, resilient, and moderately durable, with a heat and stain resistant finish. Because leather is an organic material, you can expect its appearance to change subtly over time.</p>
@@ -19,7 +24,6 @@ function Leather() {
         <p>Any defects in craftsmanship: stitching coming undone, a rivet that no longer holds, will be repaired for free up to a year after purchase. You only pay for shipping.</p>
         <p>Damage incurred through ordinary wear and tear is not covered under the warranty but can be judged on a case-by-case basis and restored to usable condition at an hourly repair rate plus shipping.</p>
         <p>I do not repair items I didn't make</p>
-        {/* add a shop now button */}
 
     </div>
   );

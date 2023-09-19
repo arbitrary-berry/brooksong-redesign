@@ -8,13 +8,7 @@ import Leather from './Leather';
 import Story from "./Story";
 import Donation from "./Donation";
 import FAQs from "./FAQs";
-import MeganBag from "./MeganBag";
-import MiniBag from "./MiniBag";
-import ChristaClutch from "./ChristaClutch";
-import PassportCover from "./PassportCover";
-import MiaSnapWallet from "./MiaSnapWallet";
-import BigTasselKeychain from "./BigTasselKeychain";
-import MiniTasselKeychain from "./MiniTasselKeychain";
+import ProductDetail from "./ProductDetail"
 import Cart from "./Cart";
 import About from "./About"
 import Header from "./Header";
@@ -39,13 +33,8 @@ function App() {
         <Route path="/story" ><Story /></Route>
         <Route path="/donation"><Donation /></Route>
         <Route path="/faqs"><FAQs /></Route>
-        <Route path="/meganbag"><MeganBag /></Route>
-        <Route path="/minibag"><MiniBag /></Route>
-        <Route path="/christaclutch"><ChristaClutch /></Route>
-        <Route path="/passportcover"><PassportCover /></Route>
-        <Route path="/miasnapwallet"><MiaSnapWallet /></Route>
-        <Route path="/bigtasselkeychain"><BigTasselKeychain /></Route>
-        <Route path="/miniTasselkeychain"><MiniTasselKeychain /></Route>
+        <Route path="/products"></Route>
+        <Route path="/products/:id"><ProductDetail /></Route>
         <Route path="/cart"><Cart /></Route>
         <Route path="/"><Home /></Route>
       </Switch>

@@ -15,9 +15,10 @@ from app import app
 
 with open('db.json', 'r') as json_file:
     data = json.load(json_file)
+    print(data)
 
 def seed_database():
-    for product_data in data.get('product', []):
+    for product_data in data.get('products', []):
         product = Product(
             name=product_data['name'],
             price=product_data['price'],
@@ -26,11 +27,14 @@ def seed_database():
             photo2=product_data['photo2'],
             photo3=product_data['photo3'],
             photo4=product_data['photo4'],
-            photo5=product_data['photo5']
+            photo5=product_data['photo5'],
         )
+        print(product)
         db.session.add(product)
+    db.session.commit()
 
-    for sku_data in data.get('SKU', []):
+
+    for sku_data in data.get('SKUs', []):
         sku = SKU(
             product_id=sku_data['product_id FK'],
             sku=sku_data['SKU'],
@@ -39,29 +43,29 @@ def seed_database():
         )
         db.session.add(sku)
 
-    for order_data in data.get('order', []):
-        order = Order(
-            customer_id=order_data['customer_id FK'],
-            paid_unpaid=order_data['paid/unpaid'],
-            status=order_data['status']
-        )
-        db.session.add(order)
+    # for order_data in data.get('orders', []):
+    #     order = Order(
+    #         customer_id=order_data['customer_id FK'],
+    #         paid_unpaid=order_data['paid/unpaid'],
+    #         status=order_data['status']
+    #     )
+    #     db.session.add(order)
 
-    for order_item_data in data.get('order item', []):
-        order_item = OrderItem(
-            sku_id=order_item_data['SKU_id FK'],
-            order_id=order_item_data['order_id FK'],
-            quantity=order_item_data['quantity']
-        )
-        db.session.add(order_item)
+    # for order_item_data in data.get('order_items', []):
+    #     order_item = OrderItem(
+    #         sku_id=order_item_data['SKU_id FK'],
+    #         order_id=order_item_data['order_id FK'],
+    #         quantity=order_item_data['quantity']
+    #     )
+    #     db.session.add(order_item)
 
-    for customer_data in data.get('customer', []):
+    for customer_data in data.get('customers', []):
         customer = Customer(
             first_name=customer_data['first_name'],
             last_name=customer_data['last_name'],
             email=customer_data['email'],
             username=customer_data['username'],
-            _password=bcrypt.generate_password_hash(customer_data['_password'].encode('utf-8')).decode('utf-8'),
+            password=customer_data['password'],
             address=customer_data['address']
         )
         db.session.add(customer)
@@ -72,7 +76,7 @@ def seed_database():
             last_name=new_customer_data['last_name'],
             email=new_customer_data['email'],
             username=new_customer_data['username'],
-            password=bcrypt.generate_password_hash(new_customer_data['password'].encode('utf-8')).decode('utf-8'),
+            password=new_customer_data['password'],
             address=new_customer_data['address']
         )
         db.session.add(new_customer)
@@ -81,66 +85,66 @@ def seed_database():
     
         {
             "id": "1",
-            "photo1": "client/src/images/Brooksong_Design_Megan_bag_hero.jpg",
-            "photo2": "client/src/images/Brooksong_Design_Megan_bag_front.jpg",
-            "photo3": "client/src/images/Brooksong_Design_Megan_bag_back.jpg",
-            "photo4": "client/src/images/Brooksong_Design_Megan_bag_inner.jpg",
-            "photo5": "client/src/images/Brooksong_Design_Megan_bag_props.jpg",
-            "photo6": "client/src/images/Brooksong_Design_Megan_bag_swatches.jpg"
+            "photo1": "/images/Brooksong_Design_Megan_bag_hero.jpg",
+            "photo2": "/images/Brooksong_Design_Megan_bag_front.jpg",
+            "photo3": "/images/Brooksong_Design_Megan_bag_back.jpg",
+            "photo4": "/images/Brooksong_Design_Megan_bag_inner.jpg",
+            "photo5": "/images/Brooksong_Design_Megan_bag_props.jpg",
+            "photo6": "/images/Brooksong_Design_Megan_bag_swatches.jpg"
         },
         {
             "id": "2",
-            "photo1": "client/src/images/Brooksong_Design_Mini_bag_hero.jpg",
-            "photo2": "client/src/images/Brooksong_Design_Mini_bag_front.jpg",
-            "photo3": "client/src/images/Brooksong_Design_Mini_bag_back.jpg",
-            "photo4": "client/src/images/Brooksong_Design_MIni_bag_inner.jpg",
-            "photo5": "client/src/images/Brooksong_Design_Mini_bag_props.jpg",
-            "photo6": "client/src/images/Brooksong_Design_Mini_bag_swatches.jpg"
+            "photo1": "/images/Brooksong_Design_Mini_bag_hero.jpg",
+            "photo2": "/images/Brooksong_Design_Mini_bag_front.jpg",
+            "photo3": "/images/Brooksong_Design_Mini_bag_back.jpg",
+            "photo4": "/images/Brooksong_Design_MIni_bag_inner.jpg",
+            "photo5": "/images/Brooksong_Design_Mini_bag_props.jpg",
+            "photo6": "/images/Brooksong_Design_Mini_bag_swatches.jpg"
         },
         {
             "id": "3",
-            "photo1": "client/src/images/Brooksong_Design_Christa_clutch_hero.jpg",
-            "photo2": "client/src/images/Brooksong_Design_Christa_clutch_front.jpg",
-            "photo3": "client/src/images/Brooksong_Design_Christa_clutch_back.jpg",
-            "photo4": "client/src/images/Brooksong_Design_Christa_clutch_props.jpg",
-            "photo5": "client/src/images/Brooksong_Design_Christa_clutch_strap.jpg",
-            "photo6": "client/src/images/Brooksong_Design_all_leather_swatches.jpg"
+            "photo1": "/images/Brooksong_Design_Christa_clutch_hero.jpg",
+            "photo2": "/images/Brooksong_Design_Christa_clutch_front.jpg",
+            "photo3": "/images/Brooksong_Design_Christa_clutch_back.jpg",
+            "photo4": "/images/Brooksong_Design_Christa_clutch_props.jpg",
+            "photo5": "/images/Brooksong_Design_Christa_clutch_strap.jpg",
+            "photo6": "/images/Brooksong_Design_all_leather_swatches.jpg"
         },
         {
             "id": "4",
-            "photo1": "client/src/images/Brooksong_Design_Passport_cover_hero1.jpg",
-            "photo2": "client/src/images/Brooksong_Design_Passport_cover_hero.jpg",
-            "photo3": "client/src/images/Brooksong_Design_Passport_cover_inner.jpg",
-            "photo4": "client/src/images/Brooksong_Design_Passport_cover_props.jpg",
-            "photo5": "client/src/images/Brooksong_Design_Passport_cover_connector.jpg",
-            "photo6": "client/src/images/Brooksong_Design_all_leather_swatches.jpg"
+            "photo1": "/images/Brooksong_Design_Passport_cover_hero1.jpg",
+            "photo2": "/images/Brooksong_Design_Passport_cover_hero.jpg",
+            "photo3": "/images/Brooksong_Design_Passport_cover_inner.jpg",
+            "photo4": "/images/Brooksong_Design_Passport_cover_props.jpg",
+            "photo5": "/images/Brooksong_Design_Passport_cover_connector.jpg",
+            "photo6": "/images/Brooksong_Design_all_leather_swatches.jpg"
         },
         {
             "id": "5",
-            "photo1": "client/src/images/Brooksong_Design_Mia_Snap_wallet_hero.jpg",
-            "photo2": "client/src/images/Brooksong_Design_Mia_Snap_wallet_front.jpg",
-            "photo3": "client/src/images/Brooksong_Design_Mia_Snap_wallet_back.jpg",
-            "photo4": "client/src/images/Brooksong_Design_Mia_Snap_wallet_inner.jpg",
-            "photo5": "client/src/images/Brooksong_Design_Mia_Snap_wallet_props.JPG",
-            "photo6": "client/src/images/Brooksong_Design_all_leather_swatches.jpg"
+            "photo1": "/images/Brooksong_Design_Mia_Snap_wallet_hero.jpg",
+            "photo2": "/images/Brooksong_Design_Mia_Snap_wallet_front.jpg",
+            "photo3": "/images/Brooksong_Design_Mia_Snap_wallet_back.jpg",
+            "photo4": "/images/Brooksong_Design_Mia_Snap_wallet_inner.jpg",
+            "photo5": "/images/Brooksong_Design_Mia_Snap_wallet_props.JPG",
+            "photo6": "/images/Brooksong_Design_all_leather_swatches.jpg"
         },
         {
             "id": "6",
-            "photo1": "client/src/images/Brooksong_Design_Big_tassel_keychain_hero.jpg",
-            "photo2": "client/src/images/Brooksong_Design_Big_tassel_keychain_hero2.jpg",
-            "photo3": "client/src/images/Brooksong_Design_Big_tassel_keychain_onbag.jpg",
-            "photo4": "client/src/images/Brooksong_Design_tassel_keychain_both.JPG",
-            "photo5": "client/src/images/Brooksong_Design_Big_tassel_keychain_props.jpg",
-            "photo6": "client/src/images/Brooksong_Design_all_leather_swatches.jpg"
+            "photo1": "/images/Brooksong_Design_Big_tassel_keychain_hero.jpg",
+            "photo2": "/images/Brooksong_Design_Big_tassel_keychain_hero2.jpg",
+            "photo3": "/images/Brooksong_Design_Big_tassel_keychain_onbag.jpg",
+            "photo4": "/images/Brooksong_Design_tassel_keychain_both.JPG",
+            "photo5": "/images/Brooksong_Design_Big_tassel_keychain_props.jpg",
+            "photo6": "/images/Brooksong_Design_all_leather_swatches.jpg"
         },
         {
             "id": "7",
-            "photo1": "client/src/images/Brooksong_Design_Mini_tassel_keychain_hero.jpg",
-            "photo2": "client/src/images/Brooksong_Design_Mini_tassel_keychain_hero2.jpg",
-            "photo3": "client/src/images/Brooksong_Design_Mini_tassel_keychain_hero3.jpg",
-            "photo4": "client/src/images/Brooksong_Design_tassel_keychain_both.JPG",
-            "photo5": "client/src/images/Brooksong_Design_Mini_tassel_keychain_props.jpg",
-            "photo6": "client/src/images/Brooksong_Design_all_leather_swatches.jpg"
+            "photo1": "/images/Brooksong_Design_Mini_tassel_keychain_hero.jpg",
+            "photo2": "/images/Brooksong_Design_Mini_tassel_keychain_hero2.jpg",
+            "photo3": "/images/Brooksong_Design_Mini_tassel_keychain_hero3.jpg",
+            "photo4": "/images/Brooksong_Design_tassel_keychain_both.JPG",
+            "photo5": "/images/Brooksong_Design_Mini_tassel_keychain_props.jpg",
+            "photo6": "/images/Brooksong_Design_all_leather_swatches.jpg"
         }
     ]
 
@@ -160,13 +164,21 @@ def seed_database():
         except SQLAlchemyError as e:
             print(f"An error occured: {str(e)}")
 
-    # Commit the changes to the database
     db.session.commit()
+    print([product.name for product in Product.query.all()])
     
+def clear_database():
+    Product.query.delete()
+    SKU.query.delete()
+    Order.query.delete()
+    OrderItem.query.delete()
+    Customer.query.delete()
+    print([product.name for product in Product.query.all()])
+
 
 if __name__ == '__main__':
-    engine = create_engine("sqlite:///")
     with app.app_context():
+        clear_database()
         print("Starting seed...")
         # Seed code goes here!
         seed_database()

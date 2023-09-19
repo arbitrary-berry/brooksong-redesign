@@ -4,7 +4,6 @@ function Donation() {
 
   return (
     <div>
-        Donation
         <h1>10% of Profits go to destigmatizing mental illness</h1>
         <p>Mental health is a cause close to my heart. As someone who manages mental illness myself, I know the stigma can have a huge impact on our self-percetion, as well as our ability to get the help we need.</p>
         <p>I want to do more. I want mental illness not to be a topic swept under the rug but one we are able to have a real conversation about. I want a system for more accurate diagnosis. Being misdiagnosed, besides getting on the wrong medication (which can exacerbate other health issues), can impact your mindset, your healing and your ability to manage your condition. Since I'm not a scientist, I don't even know where to start to create a better system for diagnosis. This is what I can do: donate to those doing the work to help others.</p>
