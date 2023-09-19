@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom/cjs/react-router-dom";
-import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
+import { styled } from "@mui/material";
 
 function Cart() {
   // Initialize the cart as an empty array of items
@@ -32,6 +32,10 @@ function Cart() {
       backgroundColor: 'white', 
       color: 'black',
     },
+    fontfamily: 'Lato, sans-serif',
+    fontSize: '16px', 
+    fontweight: 'bold',
+    textTransform: 'lowercase',
   }));
 
   return (
@@ -44,7 +48,7 @@ function Cart() {
           {cartItems.map((product) => (
             <li key={product.id}>
               {product.name} - ${product.price}
-              <button onClick={() => removeFromCart(product.id)}>Remove</button>
+              <StyledButton onClick={() => removeFromCart(product.id)}>Remove</StyledButton>
             </li>
           ))}
         </ul>

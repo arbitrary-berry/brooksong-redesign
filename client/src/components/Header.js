@@ -12,17 +12,20 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 
-
 const StyledButton = styled(Button)(({ theme }) => ({
-    backgroundColor: 'black', 
-    color: theme.palette.common.white,
-    borderRadius: "15%",
-    margin: "5px",
-    '&:hover': {
-      backgroundColor: 'white', 
-      color: 'black',
-    },
-  }));
+  backgroundColor: 'black', 
+  color: theme.palette.common.white,
+  borderRadius: "15%",
+  margin: "5px",
+  '&:hover': {
+    backgroundColor: 'white', 
+    color: 'black',
+  },
+  fontfamily: 'Lato, sans-serif',
+  fontSize: '16px', 
+  fontweight: 'bold',
+  textTransform: 'lowercase',
+}));
 
 const TransparentAppBar = styled(AppBar)(({ theme }) => ({
     backgroundColor: "transparent",
@@ -33,8 +36,6 @@ const containerStyle ={
   display: 'flex',
   alignItems: 'center',
 };
-
-
 
 function Header() {
 

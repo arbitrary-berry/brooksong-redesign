@@ -36,6 +36,10 @@ const StyledButton = styled(Button)(({ theme }) => ({
     backgroundColor: 'white', 
     color: 'black',
   },
+  fontfamily: 'Lato, sans-serif',
+  fontSize: '16px', 
+  fontweight: 'bold',
+  textTransform: 'lowercase',
 }));
 
 function Home() {
@@ -62,7 +66,7 @@ function Home() {
             />
             <CardContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Typography variant="body1" color="black" style={{ marginBottom: 'auto' }}>
-                $340
+                <h3>$340</h3>
               </Typography>
               <CardActions>
                 <NavLink to="/products/1">
@@ -83,7 +87,7 @@ function Home() {
             />
             <CardContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Typography variant="body1" color="black" style={{ marginBottom: 'auto' }}>
-                $175
+                <h3>$175</h3>
               </Typography>
               <CardActions>
                 <NavLink to="/products/2">
@@ -104,7 +108,7 @@ function Home() {
             />
             <CardContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Typography variant="body1" color="black" style={{ marginBottom: 'auto' }}>
-                $124
+                <h3>$124</h3>
               </Typography>
               <CardActions>
                 <NavLink to="/products/3">

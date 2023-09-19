@@ -23,7 +23,7 @@ function Donation() {
         <p>And I want this business to support me and help others. So 10% of profits from each sale go to the <a href="https://988lifeline.org/">National Suicide Prevention Lifeline.</a></p>
         <h1>MAKE A DONATION.</h1>
         <p>If you or someone you know is suffering, reach out and ask for help. We can’t do it alone. Dial 9-8-8</p>
-        add a donate now button<a href="https://988lifeline.org/donate/"></a>
+        add a donate now button<a href="https://988lifeline.org/donate/" alt="Suicide Prevention Lifeline website"></a>
     </div>
   );
 }

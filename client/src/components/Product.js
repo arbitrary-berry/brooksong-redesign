@@ -11,15 +11,19 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
 const StyledButton = styled(Button)(({ theme }) => ({
-    backgroundColor: 'black', 
-    color: theme.palette.common.white,
-    borderRadius: "15%",
-    margin: "5px",
-    '&:hover': {
-      backgroundColor: 'white', 
-      color: 'black',
-    },
-  }));
+  backgroundColor: 'black', 
+  color: theme.palette.common.white,
+  borderRadius: "15%",
+  margin: "5px",
+  '&:hover': {
+    backgroundColor: 'white', 
+    color: 'black',
+  },
+  fontfamily: 'Lato, sans-serif',
+  fontSize: '16px', 
+  fontweight: 'bold',
+  textTransform: 'lowercase',
+}));
 
 function Product({ id, name, photo1, price }) {
   return (
@@ -36,7 +40,7 @@ function Product({ id, name, photo1, price }) {
               />
                 <CardContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <Typography variant="body1" color="black" style={{ marginBottom: 'auto' }}>
-                    {price}
+                    <h3>{price}</h3>
                   </Typography>
                   <CardActions>
                     <NavLink to={`/products/${id}`}>

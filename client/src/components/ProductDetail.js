@@ -111,6 +111,10 @@ function ProductDetail() {
       backgroundColor: 'white', 
       color: 'black',
     },
+    fontfamily: 'Lato, sans-serif',
+    fontSize: '16px', 
+    fontweight: 'bold',
+    textTransform: 'lowercase',
   }));
 
   useEffect(() => {

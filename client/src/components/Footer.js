@@ -15,17 +15,6 @@ const StickyFooter = styled('div')({
   textAlign: 'center',
 });
 
-const StyledButton = styled(Button)(({ theme }) => ({
-  backgroundColor: 'black', 
-  color: theme.palette.common.white,
-  borderRadius: "15%",
-  margin: "5px",
-  '&:hover': {
-    backgroundColor: 'white', 
-    color: 'black',
-  },
-}));
-
 const footerStyle = {
   display: 'flex',
   justifyContent: 'space-between',
@@ -35,6 +24,21 @@ const buttonContainerStyle = {
   paddingLeft: '90px',
   paddingRight: '90px',
 };
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  backgroundColor: 'black', 
+  color: theme.palette.common.white,
+  borderRadius: "15%",
+  margin: "5px",
+  '&:hover': {
+    backgroundColor: 'white', 
+    color: 'black',
+  },
+  fontfamily: 'Lato, sans-serif',
+  fontSize: '16px', 
+  fontweight: 'bold',
+  textTransform: 'lowercase',
+}));
 
 function Footer() {
   // const { customer } = useCustomerAuth(); 
