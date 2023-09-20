@@ -69,13 +69,11 @@ function Signup({onSignup}) {
                 <Field type="text" id="last_name" name="last_name" />
                 <ErrorMessage name="last_name" />
             </div>
-            {signUp && (
               <div>
                 <label htmlFor="email">Email</label>
                 <Field type="text" id="email" name="email" />
                 <ErrorMessage name="email" />
               </div>
-            )}
             <div>
               <label htmlFor="address">Address</label>
               <Field type="text" id="address" name="address" />

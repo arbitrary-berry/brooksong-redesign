@@ -20,7 +20,7 @@ class Product(db.Model, SerializerMixin):
     photo5 = db.Column(db.String)
 
     skus = relationship('SKU', backref='product')
-    serialize_rules = ('-skus.product',)
+    serialize_rules = ("-skus.product","-skus.order_items")
     
 class SKU(db.Model, SerializerMixin):
     __tablename__ = "skus"
@@ -32,6 +32,7 @@ class SKU(db.Model, SerializerMixin):
     stock = db.Column(db.Integer)
 
     order_items = relationship('OrderItem', backref='sku')
+    serialize_rules = ("-order-items.sku",)
 
 class OrderItem(db.Model, SerializerMixin):
     __tablename__ = "order_items"
@@ -41,15 +42,18 @@ class OrderItem(db.Model, SerializerMixin):
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id'))
     quantity = db.Column(db.Integer)
 
+    serialize_rules = ("-order.order_items", "-sku.order_items",)
+
 class Order(db.Model, SerializerMixin):
     __tablename__ = "orders"
 
     id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'))
     paid_unpaid = db.Column(db.String)
     status = db.Column(db.String)
 
     order_items = relationship('OrderItem', backref='order', cascade='delete')
+    serialize_rules=("-order_items.order", "-order_items.sku")
     order_items_proxy = association_proxy('order_items', 'sku')
 
 class Customer(db.Model, SerializerMixin):
@@ -63,8 +67,24 @@ class Customer(db.Model, SerializerMixin):
     _password = db.Column(db.String(60))
     address = db.Column(db.String(255))
 
-    # orders = relationship('Order', backref='order')
-    # filter for unpaid order
+    orders = relationship('Order', backref='customer')
+    serialize_rules=("-orders.customer",)
+
+    def to_dict(self):
+        data= {
+            'id': self.id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'email': self.email,
+            'username': self.username,
+            'address': self.address,
+            'current_cart': self.current_cart.to_dict() if self.current_cart else None
+        }
+        return data
+
+    @property
+    def current_cart(self):
+        return Order.query.filter_by(customer_id=self.id, paid_unpaid='unpaid').order_by(Order.id.desc()).first()
 
     @validates("password")
     def validate_password(self, key, value):

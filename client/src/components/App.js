@@ -13,6 +13,9 @@ import Cart from "./Cart";
 import About from "./About"
 import Header from "./Header";
 import Footer from "./Footer";
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import CheckoutForm from './CheckoutForm';
 
 
 function App() {
@@ -21,6 +24,18 @@ function App() {
   useEffect(() => {
     checkAuthorized();
   }, [])
+
+  const stripePromise = loadStripe(
+    "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"
+  );
+
+  const stripeOptions = {
+
+    clientSecret: '{{CLIENT_SECRET}}',
+
+    appearance: {}
+  }
+
 
   return (
   <div>
@@ -36,6 +51,11 @@ function App() {
         <Route path="/products/:id"><ProductDetail /></Route>
         <Route path="/products"></Route>
         <Route path="/cart"><Cart /></Route>
+        <Route path="/checkout">
+          <Elements stripe={stripePromise} options={stripeOptions}>
+            <CheckoutForm />
+          </Elements>
+        </Route>
         <Route path="/"><Home /></Route>
       </Switch>
     <Footer />

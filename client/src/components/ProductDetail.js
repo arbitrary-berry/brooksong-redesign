@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { styled } from '@mui/material/styles';
 import { useCart } from '../context/CartContext';
+import Cart from "./Cart";
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Grid from '@mui/material/Grid';
@@ -24,10 +25,9 @@ import CardContent from '@mui/material/CardContent';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { Carousel } from 'react-responsive-carousel';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add';
 import { useParams } from 'react-router-dom/cjs/react-router-dom';
+import { CustomerAuthContext } from "../context/CustomerAuthProvider";
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import "../index.css";
 
@@ -37,38 +37,21 @@ function ProductDetail() {
   const { id } = useParams()
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [color, setColor] = useState(true);
+  const [skuObj, setSkuObj] = useState(null);
   const [quantity, setQuantity] = useState(false);
+
+  const { customer }= useContext(CustomerAuthContext)
 
   const carouselRef = useRef(null);
   const { addToCart } = useCart();
 
-  const uniqueColors = [...new Set(productObj?.skus?.map((sku => sku.color)))];
-
-  // const colorRadioButtons = uniqueColors.map((color) => (
-  //   <FormControlLabel
-  //     key={color}
-  //     value={color}
-  //     control={<Radio onChange={handleColorChange} />}
-  //     label={color}
-  //   />
-  // ));
-
-  const handleColorChange = (e) => {
-    setColor(e.target.value)
+  const handleSkuChange = (e) => {
+    setSkuObj(e.target.value)
   }
 
   const handleQuantityChange = (e) => {
     setQuantity(e.target.value);
   }
-
-  const handleCarouselPrev = () => {
-    setSelectedImageIndex((prevIndex) => (prevIndex - 1 + productObj.length) % productObj.length);
-  };
-  
-  const handleCarouselNext = () => {
-    setSelectedImageIndex((prevIndex) => (prevIndex + 1) % productObj.length);
-  };
 
   const openLightbox = (index) => {
     setSelectedImageIndex(index);
@@ -79,33 +62,32 @@ function ProductDetail() {
     setLightboxOpen(false);
   };
 
-  function handleSubmit(e){
-    e.preventDefault()
-    console.log(productObj)
-
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log(productObj);
     console.log('Selected Product: selectedProduct');
-
+  
     fetch('/order_items', {
       method: 'POST',
-      headers: { 'Content-Type' : 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        product_id: productObj.id,
-        color, 
+        order_id: customer.current_cart.id,
         quantity,
-    }),
+        sku_id: skuObj,
+      }),
     })
-    .then(response => response.json())
-    .then(console.log)
-    // .then(newOrderItem => { 
-    //   console.log('New Order Item:', newOrderItem);
-    //   addToCart({    
-    //     product_id: product.id,
-    //     color, 
-    //     quantity,
-    // });
-    // })
-    // .catch((error) =>
-    //   console.error('Error:', error))
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Request failed with status: ${response.status}`);
+        }
+          return response.json();
+      })
+      .then((newOrderItem) => {
+        console.log('New Order Item:', newOrderItem);
+  
+        addToCart(newOrderItem); 
+      })
+      .catch((error) => console.error('Error:', error));
   }
 
   const customCarouselStyles = {
@@ -136,7 +118,9 @@ function ProductDetail() {
   useEffect(() => {
     fetch(`/products/${id}`)
       .then((res) => res.json())
-      .then((data) => setProductObj(data))
+      .then((data) => {
+        setProductObj(data)
+        setSkuObj(data.skus[0])})
       .catch((error) => console.error("Error fetching productObj:", error));
   }, []);
   if (!productObj) return (<h1>loading</h1>)
@@ -170,25 +154,26 @@ function ProductDetail() {
                   {productObj.description}
                 </Typography>
               </CardContent>
-              <CardActions>
-                <FormControl>
-                  <FormLabel id="demo-radio-buttons-group-label">color</FormLabel>
-                    <RadioGroup
-                      aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue={productObj.skus[0].color} // Set the default color from the first SKU
-                      name="radio-buttons-group"
-                      onChange={handleColorChange}
-                    >
-                      {productObj.skus.map((sku) => (
-                        <FormControlLabel
-                          key={sku.id}
-                          value={sku.color}
-                          control={<Radio />}
-                          label={sku.color}
-                        />
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
+              <Box component="form" onSubmit={handleSubmit}>
+                <CardActions>
+                  <FormControl>
+                    <FormLabel id="demo-radio-buttons-group-label">color</FormLabel>
+                      <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        defaultValue={productObj.skus[0].id} 
+                        name="radio-buttons-group"
+                        onChange={handleSkuChange}
+                      >
+                        {productObj.skus.map((sku) => (
+                          <FormControlLabel
+                            key={sku.id}
+                            value={sku.id}
+                            control={<Radio />}
+                            label={sku.color}
+                          />
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
                   <FormControl sx={{ m: 1, minWidth: 80 }}>
                     <InputLabel id="demo-simple-select-label">quantity</InputLabel>
                       <Select
@@ -206,7 +191,8 @@ function ProductDetail() {
                       </Select>
                   </FormControl>
                 </CardActions>
-                      <StyledButton onClick={handleSubmit}>add to cart</StyledButton>
+                      <StyledButton type='submit'>add to cart</StyledButton>
+                  </Box>
                 <Accordion elevation={0}>
                   <AccordionSummary
                     expandIcon={<AddIcon style={{ color: 'black' }}/>}
@@ -324,6 +310,7 @@ function ProductDetail() {
               </Carousel>
             </DialogContent>
           </Dialog>
+          <Cart addToCart={addToCart} />
         </div>
 );
 }

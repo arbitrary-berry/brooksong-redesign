@@ -8,15 +8,18 @@ from flask_restful import Resource
 from sqlite3 import IntegrityError
 from flask import Flask, make_response, jsonify, request, session
 from sqlalchemy.exc import IntegrityError
+from dotenv import load_dotenv
 import os
 import json
 import stripe
-from flask import jsonify
 
 # Local imports
 from config import app, db, api
 # Add your model imports
 from models import Product, SKU, OrderItem, Order, Customer
+
+load_dotenv()
+stripe_secret_key=os.getenv("STRIPE_SECRET_KEY")
 
 # Views go here!
 
@@ -47,9 +50,35 @@ class CustomerById(Resource):
         return make_response(customer.to_dict(), 200)
 
 class OrderItems(Resource):
+    def get(self):
+        order_items = [order_item.to_dict() for order_item in OrderItem.query.all()]
+        return make_response(order_items, 200)
+
     def post(self):
         req_json = request.get_json()
         print(req_json)
+
+        try:
+            sku_id = req_json['sku_id']
+            order_id = req_json['order_id']
+            quantity = req_json['quantity']
+
+            new_order_item = OrderItem(
+                sku_id = sku_id,
+                order_id = order_id,
+                quantity=quantity,
+            )
+
+            db.session.add(new_order_item)
+            db.session.commit()
+
+            return make_response(new_order_item.to_dict(), 201)
+        
+        except KeyError as e:
+            print(f"keyError: {str(e)}")
+            return {'error': f'Missing required field: {str}'}, 400
+        except IntegrityError:
+            return {'error': 'Database integrity violation'}, 500
     
 class OrderById(Resource):
     def get(self, id):
@@ -66,17 +95,27 @@ class Signup(Resource):
         req_json = request.get_json()
         try:
             new_customer = Customer(
-                first_name=req_json["firstname"],
-                last_name=req_json["lastname"],
+                first_name=req_json["first_name"],
+                last_name=req_json["last_name"],
                 email=req_json["email"],
                 username=req_json["username"],
                 password=req_json["password"],
                 address=req_json["address"],
                 )
-        except:
-            abort(422, "Invalid customer data")
-        db.session.add(new_customer)
-        db.session.commit()
+            db.session.add(new_customer)
+            db.session.commit()
+
+            new_order = Order(
+                customer_id=new_customer.id,
+                paid_unpaid="unpaid",
+                status="not shipped"
+                )
+        
+            db.session.add(new_order)
+            db.session.commit()
+        except Exception as e:
+            abort(422, f"Invalid customer data {e}")
+        
         session["customer_id"] = new_customer.id
         return make_response(new_customer.to_dict(), 201)   
     
@@ -117,11 +156,11 @@ def create_payment():
                 "publishable_key": os.environ["STRIPE_PUBLISHABLE_KEY"],
             }
 
-            stripe.api_key = stripe_keys["secret_key"]
+            stripe.api_key = stripe_secret_key
             data = json.loads(request.data)
             intent = stripe.PaymentIntent.create(
                 amount=2000,
-                currency='eur',
+                currency='usd',
                 automatic_payment_methods={
                     'enabled': True,
                 },
@@ -131,13 +170,31 @@ def create_payment():
                 },
             )
 
-            return ({
-                'clientSecret': intent['client_secret']
-            })
+            return jsonify({'clientSecret': intent['client_secret']}), 200
 
         except Exception as e:
             return jsonify(error=str(e)), 403
+
+
+
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+
+@app.route('/secret')
+def secret():
+    data = request.get_json()
+    price = data['price']
+
+    try:
+        intent = stripe.PaymentIntent.create(
+            price=price,
+            currency='usd',
+        )
+        return jsonify(client_secret=intent.client_secret)
         
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
+
 @app.route('/api/activities/check-payment-intent', methods=['POST'])
 def check_payment():
         stripe.api_key = os.environ["STRIPE_SECRET_KEY"]

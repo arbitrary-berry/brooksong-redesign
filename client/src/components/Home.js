@@ -127,14 +127,30 @@ function Home() {
             <div style={containerStyle2}></div>
         </Grid>
         <Grid item xs={4}>
+          <Typography variant="body1">
           <h2>The bag that started it all</h2>
-          <p>It all began with my sister-in-law Megan and her bulging, tattered shoulder bag.</p>
-          <p>The bag had seen better days: It was stuffed to the brim and the strap was literally hanging on by a thread.</p>
-          <p>Girl, no! I thought.</p>
-          <p>Her birthday was coming up and I wanted to surprise her. I thought about her preferences, unique style, and designed a new bag out of heavy canvas. She loved it!</p>
-          <p>And the seed to start a business was planted.</p>
-          <p>A few years later, I had the chance to explore a friend’s leather studio and try my hand at leatherwork. Having the design for Megan’s bag already drafted I decided to make one out of leather. And the seed to start brooksong design began to bloom.</p>
-          <p>The <NavLink to='/meganbag'>Megan bag</NavLink>, named after my sister-in-law, became my flagship product.</p>
+          </Typography>
+          <Typography variant="body1">
+          It all began with my sister-in-law Megan and her bulging, tattered shoulder bag.
+          </Typography>
+          <Typography variant="body1">
+          The bag had seen better days: It was stuffed to the brim and the strap was literally hanging on by a thread.
+          </Typography>
+          <Typography variant="body1">
+          Girl, no! I thought.
+          </Typography>
+          <Typography variant="body1">
+          Her birthday was coming up and I wanted to surprise her. I thought about her preferences, unique style, and designed a new bag out of heavy canvas. She loved it!
+          </Typography>
+          <Typography variant="body1">
+          And the seed to start a business was planted.
+          </Typography>
+          <Typography variant="body1">
+          A few years later, I had the chance to explore a friend’s leather studio and try my hand at leatherwork. Having the design for Megan’s bag already drafted I decided to make one out of leather. And the seed to start brooksong design began to bloom.
+          </Typography>
+          <Typography variant="body1">
+          The <NavLink to='/meganbag'>Megan bag</NavLink>, named after my sister-in-law, became my flagship product.
+          </Typography>
           <NavLink to="/story">
             <StyledButton>story</StyledButton>
           </NavLink>
@@ -155,9 +171,15 @@ function Home() {
       ))}
     </ImageList>
     <div style={{ textAlign: 'center' }}>
-      <h2>our products</h2>
-      <p>I combine the beauty and sophistication of Italian leather with the durability of American-made hardware. Every piece is intended to be a one-of-a-kind expression of your individuality and confidence.</p>
-      <p>Each bespoke item is thoughtfully designed and handcrafted by me, Alyssa, in my attic-turned-studio in Portland, Oregon.</p>
+      <Typography variant="body1">
+        <h2>our products</h2>
+      </Typography>
+      <Typography variant="body1">
+        I combine the beauty and sophistication of Italian leather with the durability of American-made hardware. Every piece is intended to be a one-of-a-kind expression of your individuality and confidence.
+      </Typography>
+      <Typography variant="body1">
+        Each bespoke item is thoughtfully designed and handcrafted by me, Alyssa, in my attic-turned-studio in Portland, Oregon.
+      </Typography>
     </div>
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
