@@ -5,7 +5,7 @@ const AccountDetails = ({ first_name, last_name, email, username, password, addr
   
   return (
     <div>
-      <h1>First Name: {first_name} Last Name; {last_name} </h1>
+      <h1>First Name: {first_name} Last Name: {last_name} </h1>
       <p>Email: {email} </p>
       <p>Username: {username}</p>
       <p>Address: {address}</p>

@@ -19,8 +19,14 @@ from config import app, db, api
 from models import Product, SKU, OrderItem, Order, Customer
 
 load_dotenv()
-stripe_secret_key=os.getenv("STRIPE_SECRET_KEY")
-
+stripe_keys = {
+    "secret_key": os.environ["STRIPE_SECRET_KEY"],
+    "publishable_key": os.environ["STRIPE_PUBLISHABLE_KEY"],
+}
+# stripe_secret_key=os.getenv("STRIPE_SECRET_KEY")
+# stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+stripe.api_key = stripe_keys["secret_key"]
+# print(stripe)
 # Views go here!
 
 class Products(Resource):
@@ -75,8 +81,9 @@ class OrderItems(Resource):
             return make_response(new_order_item.to_dict(), 201)
         
         except KeyError as e:
-            print(f"keyError: {str(e)}")
-            return {'error': f'Missing required field: {str}'}, 400
+            missing_field = str(e)
+            print(f"keyError: {missing_field}")
+            return {'error': f'Missing required field: {missing_field}'}, 400
         except IntegrityError:
             return {'error': 'Database integrity violation'}, 500
     
@@ -156,43 +163,52 @@ def create_payment():
                 "publishable_key": os.environ["STRIPE_PUBLISHABLE_KEY"],
             }
 
-            stripe.api_key = stripe_secret_key
-            data = json.loads(request.data)
+            stripe.api_key = stripe_keys["secret_key"]
+            data = request.get_json()
+
+            if 'customer' not in data:
+                return jsonify(error='Invalid request: Missing "customer" key'), 400
+            
+            print(f"Request Data: {request.data}")
+
             intent = stripe.PaymentIntent.create(
                 amount=2000,
                 currency='usd',
-                automatic_payment_methods={
-                    'enabled': True,
-                },
-                # Again, I am providing a user_uuid, so I can identify who is making the payment later
+                automatic_payment_methods=['card'],
                 metadata={
                     'customer': data['customer']
                 },
             )
 
-            return jsonify({'clientSecret': intent['client_secret']}), 200
+            # return jsonify({'clientSecret': intent['client_secret']}), 200
+            return make_response(jsonify({'clientSecret': intent['client_secret']}), 200)
+
+        except stripe.error.StripeError as e:
+            error_message = str(e)
+            print(f"Stripe Error creating payment intent: {error_message}")
+            return jsonify(error=f'Stripe Error: {error_message}'), 500
 
         except Exception as e:
-            return jsonify(error=str(e)), 403
+            error_message = str(e)
+            print(f"Error creating payment intent: {error_message}")
+            return jsonify(error=f'Failed to create payment intent: {error_message}'), 500
 
 
 
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+# @app.route('/secret')
+# def secret():
+#     data = request.get_json()
+#     price = data['price']
 
-@app.route('/secret')
-def secret():
-    data = request.get_json()
-    price = data['price']
-
-    try:
-        intent = stripe.PaymentIntent.create(
-            price=price,
-            currency='usd',
-        )
-        return jsonify(client_secret=intent.client_secret)
+#     try:
+#         intent = stripe.PaymentIntent.create(
+#             price=price,
+#             currency='usd',
+#         )
+#         return jsonify(client_secret=intent.client_secret)
         
-    except Exception as e:
-        return jsonify(error=str(e)), 500
+#     except Exception as e:
+#         return jsonify(error=str(e)), 500
 
 
 @app.route('/api/activities/check-payment-intent', methods=['POST'])

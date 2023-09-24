@@ -7,6 +7,7 @@ import { useCart } from '../context/CartContext';
 function Cart() {
   // Initialize the cart as an empty array of items
   const [order_items, setOrder_items] = useState([]);
+  // const [testCart, setTestCard] = useState();
   const { cartItems } = useCart();
     console.log('cartItems', cartItems)
 
@@ -21,6 +22,7 @@ function Cart() {
     const updatedCart = order_items.filter((item) => item.id !== productId);
     setOrder_items(updatedCart);
   };
+  // this also needs to be a delete from the order_items table
 
   // Calculate the total price of items in the cart
   const calculateTotalPrice = () => {
@@ -58,17 +60,19 @@ function Cart() {
       });
   }, []);
 
+
   
   return (
     <div>
       <h2>Your Cart</h2>
-      {cartItems.length === 0 ? (
+
+            {order_items.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <ul>
-          {cartItems.map((product) => (
+          {order_items.map((product) => (
             <li key={product.sku.product.id}>
-              {product.sku.product.name} - {product.sku.product.price}
+              {product.sku.product.name} - ${product.sku.product.price}
               <StyledButton onClick={() => removeFromCart(product.id)}>Remove</StyledButton>
             </li>
           ))}

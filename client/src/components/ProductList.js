@@ -11,14 +11,14 @@ return (
             {products.map((product) => (
                 <Grid item xs={4} >
                     <Product 
-                    id={product.id}
-                    name={product.name}
-                    photo1={product.photo1}
-                    price={product.price}
+                        id={product.id}
+                        name={product.name}
+                        photo1={product.photo1}
+                        price={product.price}
                     />
                 </Grid>
             ))}
-        </Grid>
+            </Grid>
     </div>
 );
 }

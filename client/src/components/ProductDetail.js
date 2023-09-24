@@ -66,6 +66,7 @@ function ProductDetail() {
     e.preventDefault();
     console.log(productObj);
     console.log('Selected Product: selectedProduct');
+    console.log(customer)
   
     fetch('/order_items', {
       method: 'POST',
@@ -148,7 +149,7 @@ function ProductDetail() {
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                   <h1>{productObj.name}</h1>
-                  <h2>{productObj.price}</h2>
+                  <h2>${productObj.price}</h2>
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {productObj.description}
@@ -310,7 +311,6 @@ function ProductDetail() {
               </Carousel>
             </DialogContent>
           </Dialog>
-          <Cart addToCart={addToCart} />
         </div>
 );
 }

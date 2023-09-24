@@ -3,7 +3,7 @@
         {
             "id": "",
             "name": "megan bag",
-            "price": "$340",
+            "price": 340,
             "description": "An everyday slouchy shoulder bag to have all you need at your fingertips. Natural edge flap makes every bag one-of-a-kind.",
             "photo1": "client/src/images/Brooksong_Design_Megan_bag_hero.jpg",
             "photo2": "client/src/images/Brooksong_Design_Megan_bag_front.jpg",
@@ -15,7 +15,7 @@
         {
             "id": "",
             "name": "mini bag",
-            "price": "$175",
+            "price": 175,
             "description": "A crossbody bag for a night on the town or a gal who just needs the essentials. Natural edge flap makes every bag one-of-a-kind.",
             "photo1": "client/src/images/Brooksong_Design_Mini_bag_hero.jpg",
             "photo2": "client/src/images/Brooksong_Design_Mini_bag_front.jpg",
@@ -27,7 +27,7 @@
         {
             "id": "",
             "name": "christa clutch",
-            "price": "$124",
+            "price": 124,
             "description": "A classy zipper clutch that's versatile enough to carry on it's own or to slip into a larger bag. Comes with a removable wrist strap.",
             "photo1": "client/src/images/Brooksong_Design_Christa_clutch_hero.jpg",
             "photo2": "client/src/images/Brooksong_Design_Christa_clutch_front.jpg",
@@ -39,7 +39,7 @@
         {
             "id": "",
             "name": "passport cover",
-            "price": "$60",
+            "price": 60,
             "description": "Carry your passports in style and keep all your important travel documents and cards together.",
             "photo1": "client/src/images/Brooksong_Design_Passport_cover_hero1.jpg",
             "photo2": "client/src/images/Brooksong_Design_Passport_cover_hero.jpg",
@@ -51,7 +51,7 @@
         {
             "id": "",
             "name": "mia snap wallet",
-            "price": "$50",
+            "price": 50,
             "description": "A pocket-sized wallet, perfect for those times when you don't want to carry a bag.",
             "photo1": "client/src/images/Brooksong_Design_Mia_Snap_wallet_hero.jpg",
             "photo2": "client/src/images/Brooksong_Design_Mia_Snap_wallet_front.jpg",
@@ -63,7 +63,7 @@
         {
             "id": "",
             "name": "big tassel keychain",
-            "price": "$18",
+            "price": 18,
             "description": "A little pizzazz to add to your keys or bag. 5 1/2\" long",
             "photo1": "client/src/images/Brooksong_Design_Big_tassel_keychain_hero.jpg",
             "photo2": "client/src/images/Brooksong_Design_Big_tassel_keychain_hero2.jpg",
@@ -75,7 +75,7 @@
         {
             "id": "",
             "name": "mini tassel keychain",
-            "price": "$14",
+            "price": 14,
             "description": "A little pizzazz to add to your keys or bag. 2 3/4\" long",
             "photo1": "client/src/images/Brooksong_Design_Mini_tassel_keychain_hero.jpg",
             "photo2": "client/src/images/Brooksong_Design_Mini_tassel_keychain_hero2.jpg",

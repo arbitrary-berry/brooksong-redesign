@@ -40,7 +40,7 @@ function Product({ id, name, photo1, price }) {
               />
                 <CardContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <Typography variant="body1" color="black" style={{ marginBottom: 'auto' }}>
-                    <h3>{price}</h3>
+                    <h3>${price}</h3>
                   </Typography>
                   <CardActions>
                     <NavLink to={`/products/${id}`}>

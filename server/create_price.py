@@ -1,6 +1,5 @@
 import stripe
-stripe.api_key = "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"
-
+stripe.api_key = "pk_test_51H7Vj4K2nZ17yEZ9QyAQGRkvaYkrhyCwI18hBCiuoGBJQiIPQXCkWywjm4ardmeqYISAFAaxVWLG9A408l8ayRCB00FMTQr5tx"
 Megan_bag = stripe.Product.create(
     name="Megan bag",
     description="An everyday slouchy shoulder bag to have all you need at your fingertips. Natural edge flap makes every bag one-of-a-kind."

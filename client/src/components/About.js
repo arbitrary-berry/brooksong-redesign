@@ -16,7 +16,7 @@ function About(){
         <Accordion>
           <AccordionSummary
             expandIcon={<AddIcon />}
-            aria-controls="panel1a-content"
+            aria-controls="panel1a-content-leather"
             id="panel1a-header"
           >
             <Typography>Leather</Typography>
@@ -30,7 +30,7 @@ function About(){
         <Accordion>
           <AccordionSummary
               expandIcon={<AddIcon />}
-              aria-controls="panel1a-content"
+              aria-controls="panel1a-content-story"
               id="panel1a-header"
           >
             <Typography>Story</Typography>
@@ -44,7 +44,7 @@ function About(){
         <Accordion>
           <AccordionSummary
               expandIcon={<AddIcon />}
-              aria-controls="panel1a-content"
+              aria-controls="panel1a-content-donation"
               id="panel1a-header"
           >
             <Typography>Donation</Typography>
@@ -58,7 +58,7 @@ function About(){
         <Accordion>
           <AccordionSummary
               expandIcon={<AddIcon />}
-              aria-controls="panel1a-content"
+              aria-controls="panel1a-content-faqs"
               id="panel1a-header"
           >
             <Typography>FAQs</Typography>

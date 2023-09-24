@@ -171,7 +171,7 @@ function Home() {
       ))}
     </ImageList>
     <div style={{ textAlign: 'center' }}>
-      <Typography variant="body1">
+      <Typography>
         <h2>our products</h2>
       </Typography>
       <Typography variant="body1">
@@ -195,7 +195,6 @@ function Home() {
             <h2>Suicide Prevention Lifeline</h2>
           </div>
         </Grid>
-
       </Grid>
     </Box>
   </div>

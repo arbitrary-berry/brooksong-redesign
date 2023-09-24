@@ -4,7 +4,6 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { styled } from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
 import { NavLink } from 'react-router-dom'
-// import { useCustomerAuth } from '../context/CustomerAuthProvider';
 
 const StickyFooter = styled('div')({
   position: 'sticky',
@@ -41,7 +40,6 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 function Footer() {
-  // const { customer } = useCustomerAuth(); 
   return (
     <StickyFooter>
       <Divider />
