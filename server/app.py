@@ -112,7 +112,6 @@ class OrderStatusUpdate(Resource):
             return jsonify(response), 500
 
 
-
 ####### Handling Authorization #####
 class Signup(Resource):
     def post(self):
@@ -176,94 +175,22 @@ def create_payment_intent():
     intent = stripe.PaymentIntent.create(amount=1099, currency="usd")
     return jsonify(client_secret=intent.client_secret)
 
-        # try:
-        #     # Setup env vars beforehand 
-        #     stripe_keys = {
-        #         "secret_key": os.environ["STRIPE_SECRET_KEY"],
-        #         "publishable_key": os.environ["STRIPE_PUBLISHABLE_KEY"],
-        #     }
-
-        #     stripe.api_key = stripe_keys["secret_key"]
-        #     data = request.get_json()
-
-        #     if 'customer' not in data:
-        #         return jsonify(error='Invalid request: Missing "customer" key'), 400
-            
-        #     print(f"Request Data: {data}")
-
-        #     intent = stripe.PaymentIntent.create(
-        #         amount=2000,
-        #         currency='usd',
-        #         automatic_payment_methods={'enabled': True,},
-        #         metadata={
-        #             'customer': data['customer']
-        #         },
-        #     )
-
-        #     # return jsonify({'clientSecret': intent['client_secret']}), 200
-        #     return make_response(jsonify({'clientSecret': intent['client_secret']}), 200)
-
-        # except stripe.error.StripeError as e:
-        #     error_message = str(e)
-        #     print(f"Stripe Error creating payment intent: {error_message}")
-        #     return jsonify(error=f'Stripe Error: {error_message}'), 500
-
-        # except Exception as e:
-        #     error_message = str(e)
-        #     print(f"Error creating payment intent: {error_message}")
-        #     return jsonify(error=f'Failed to create payment intent: {error_message}'), 500
-
-
-
-# @app.route('/secret')
-# def secret():
-#     data = request.get_json()
-#     price = data['price']
-
-#     try:
-#         intent = stripe.PaymentIntent.create(
-#             price=price,
-#             currency='usd',
-#         )
-#         return jsonify(client_secret=intent.client_secret)
-        
-#     except Exception as e:
-#         return jsonify(error=str(e)), 500
-
 @app.route("/confirmed", methods=["GET", "POST"])
 def payment_success():
-    # logic to make necessary updates in db
     return redirect("/confirmed", code=302)
-    # return jsonify({"message": "success"}), 200
-# @app.route('/api/activities/check-payment-intent', methods=['POST'])
-# def check_payment():
-#         stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
-#         endpoint_secret = os.environ["STRIPE_ENDPOINT_KEY"]
 
-#         event = None
-#         payload = request.data
-#         sig_header = request.headers['STRIPE_SIGNATURE']
+@app.route('/create-new-order', methods=['POST'])
+def create_new_order_route():
+    if 'customer_id' not in session:
+        return {'error': 'Customer not authenticated'}, 401
 
-#         try:
-#             event = stripe.Webhook.construct_event(
-#                 payload, sig_header, endpoint_secret
-#             )
-#         except ValueError as e:
-#             raise e
-#         except stripe.error.SignatureVerificationError as e:
-#             raise e
+    customer_id = session['customer_id']
+    try:
+        create_new_order(customer_id)
+        return {'message': 'New cart created successfully'}, 201
+    except Exception as e:
+        return {'error': f'Failed to create a new cart: {str(e)}'}, 500
 
-#         if event['type'] == 'payment_intent.succeeded':
-#             payment_intent = event['data']['object']
-#             user_uuid = payment_intent['metadata']['customer']
-#             # Update the user here using the uuid and your db client
-#             print(f"User {user_uuid} completed a payment.")
-        
-#         else:
-#             print('Unhandled event type {}'.format(event['type']))
-
-#         return jsonify(success=True)
-        
 api.add_resource(Authorized, '/authorized')   
 api.add_resource(Signup, "/signup")
 api.add_resource(Login, "/login")

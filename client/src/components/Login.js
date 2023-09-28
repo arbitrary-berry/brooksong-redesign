@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 function Login({ onLogin }) {
   const history = useHistory();
 
-  const { handleAuthSubmit, error } = useContext(CustomerAuthContext); 
+  const { handleAuthSubmit, error, createNewOrder } = useContext(CustomerAuthContext); 
 
   return (
     <div>
@@ -23,10 +23,14 @@ function Login({ onLogin }) {
           username: Yup.string().required("Username is required"),
           password: Yup.string().required("Password is required"),
         })}
-        onSubmit={(values, actions) => {
-          handleAuthSubmit(values, actions, 'login');
-          history.push("/profile");
-          onLogin();
+        onSubmit={async (values, actions) => {
+          const loginSuccess = await handleAuthSubmit(values, actions, 'login');
+          
+          if (loginSuccess) {
+            await createNewOrder();
+            history.push("/profile");
+            onLogin();
+          }
         }}
       >
         {({ isSubmitting }) => (

@@ -7,9 +7,9 @@ const PaymentStatus = () => {
   const stripe = useStripe();
   const [message, setMessage] = useState(null);
   const location = useLocation();
-  const { customer } = useCustomerAuth();
+  const { customer, createNewCart } = useCustomerAuth();
+  
   const orderId = customer?.current_cart?.id || null;
-
 
   useEffect(() => {
     if (!stripe || !orderId) {
@@ -26,6 +26,8 @@ const PaymentStatus = () => {
         switch (paymentIntent.status) {
           case 'succeeded':
             setMessage('Success! Payment received.');
+
+            createNewCart();
 
             fetch(`/update-order-status/${orderId}`, {
               method: 'PATCH',
@@ -53,7 +55,7 @@ const PaymentStatus = () => {
             break;
         }
       });
-  }, [stripe, orderId]);
+  }, [stripe, orderId, createNewCart]);
 
 
   return (
