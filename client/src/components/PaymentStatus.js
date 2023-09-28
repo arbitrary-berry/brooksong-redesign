@@ -1,35 +1,43 @@
-import React, { useState, useEffect } from "react";
-import {useStripe} from '@stripe/react-stripe-js';
+import React, { useState, useEffect, useContext } from "react";
+import { useStripe } from '@stripe/react-stripe-js';
+import { useLocation } from 'react-router-dom';
+import { useCustomerAuth } from "../context/CustomerAuthProvider";
 
 const PaymentStatus = () => {
   const stripe = useStripe();
   const [message, setMessage] = useState(null);
+  const location = useLocation();
+  const { customer } = useCustomerAuth();
+  const orderId = customer?.current_cart?.id || null;
+
 
   useEffect(() => {
-    if (!stripe) {
+    if (!stripe || !orderId) {
+      setMessage('Order ID not found')
       return;
     }
 
-    // Retrieve the "payment_intent_client_secret" query parameter appended to
-    // your return_url by Stripe.js
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      'payment_intent_client_secret'
-    );
+    const clientSecret = location.state.clientSecret
 
-    // Retrieve the PaymentIntent
     stripe
       .retrievePaymentIntent(clientSecret)
       .then(({paymentIntent}) => {
-        // Inspect the PaymentIntent `status` to indicate the status of the payment
-        // to your customer.
-        //
-        // Some payment methods will [immediately succeed or fail][0] upon
-        // confirmation, while others will first enter a `processing` state.
-        //
-        // [0]: https://stripe.com/docs/payments/payment-methods#payment-notification
+
         switch (paymentIntent.status) {
           case 'succeeded':
             setMessage('Success! Payment received.');
+
+            fetch(`/update-order-status/${orderId}`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ paid_unpaid: 'paid' }),
+            })
+              .then((response) => response.json())
+              .catch((error) => {
+                console.error('Failed to update order status:', error);
+              });
             break;
 
           case 'processing':
@@ -37,8 +45,6 @@ const PaymentStatus = () => {
             break;
 
           case 'requires_payment_method':
-            // Redirect your user back to your payment page to attempt collecting
-            // payment again
             setMessage('Payment failed. Please try another payment method.');
             break;
 
@@ -47,10 +53,12 @@ const PaymentStatus = () => {
             break;
         }
       });
-  }, [stripe]);
+  }, [stripe, orderId]);
 
 
-  return message;
+  return (
+    <h1>{message}</h1>
+  );
 };
 
 export default PaymentStatus;

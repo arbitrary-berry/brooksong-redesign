@@ -1,30 +1,52 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom/cjs/react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import Button from '@mui/material/Button';
 import { styled } from "@mui/material";
 import { useCart } from '../context/CartContext';
+import CheckoutForm from "./CheckoutForm";
 
-function Cart() {
-  // Initialize the cart as an empty array of items
+const listStyle = {
+  fontFamily: 'Merriweather, serif',
+  fontSize : '14px',
+};
+
+const thumbnailImageStyle = {
+  maxWidth: '300px',
+  maxHeight: '300px',
+  marginRight: '10px',
+};
+
+const listItemStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: '10px',
+};
+
+const productInfoStyle = {
+  flex: 1,
+};
+
+const buttonStyle = {
+  marginLeft: '10px',
+};
+
+
+function Cart({ orderId }) {
   const [order_items, setOrder_items] = useState([]);
-  // const [testCart, setTestCard] = useState();
   const { cartItems } = useCart();
-    console.log('cartItems', cartItems)
+  const history = useHistory();
 
-  // Function to add an item to the cart
   const addToCart = (product) => {
     console.log('Adding to cart:', product)
     setOrder_items([...order_items, product]);
   };
 
-  // Function to remove an item from the cart
   const removeFromCart = (productId) => {
     const updatedCart = order_items.filter((item) => item.id !== productId);
     setOrder_items(updatedCart);
   };
   // this also needs to be a delete from the order_items table
 
-  // Calculate the total price of items in the cart
   const calculateTotalPrice = () => {
     return order_items.reduce((total, item) => total + item.sku.product.price, 0);
   };
@@ -60,8 +82,15 @@ function Cart() {
       });
   }, []);
 
+  if (order_items.length === 0) {
+    return (
+      <div>
+        <h2>Your Cart</h2>
+        <p>Your cart is empty.</p>
+      </div>
+    );
+  }
 
-  
   return (
     <div>
       <h2>Your Cart</h2>
@@ -69,11 +98,21 @@ function Cart() {
             {order_items.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
-        <ul>
+        <ul style={listStyle}>
           {order_items.map((product) => (
-            <li key={product.sku.product.id}>
-              {product.sku.product.name} - ${product.sku.product.price}
-              <StyledButton onClick={() => removeFromCart(product.id)}>Remove</StyledButton>
+            <li key={product.sku.product.id} style={listItemStyle}>
+              <div>
+                <img 
+                src={product.sku.product.photo1} 
+                alt={product.sku.product.name}
+                style={thumbnailImageStyle} />
+              </div>
+              <div style={productInfoStyle}>
+                {product.sku.product.name} - ${product.sku.product.price}
+              </div>
+              <div style={buttonStyle}>
+                <StyledButton onClick={() => removeFromCart(product.id)}>Remove</StyledButton>
+              </div>
             </li>
           ))}
         </ul>

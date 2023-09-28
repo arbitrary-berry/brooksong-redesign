@@ -5,7 +5,7 @@ import { CustomerAuthContext } from "../context/CustomerAuthProvider";
 import { useHistory } from "react-router-dom";
 
 
-function Login({onLogin}) {
+function Login({ onLogin }) {
   const history = useHistory();
 
   const { handleAuthSubmit, error } = useContext(CustomerAuthContext); 

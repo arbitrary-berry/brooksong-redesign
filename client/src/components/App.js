@@ -16,21 +16,41 @@ import Footer from "./Footer";
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from './CheckoutForm';
+import PaymentStatus from "./PaymentStatus";
 
 const stripePromise = loadStripe(
-  "pk_test_51H7Vj4K2nZ17yEZ9QyAQGRkvaYkrhyCwI18hBCiuoGBJQiIPQXCkWywjm4ardmeqYISAFAaxVWLG9A408l8ayRCB00FMTQr5tx"
+  "pk_test_51NtdPjAon7k0RE4WOlRfPmGcPgJSJMeNeD9D4arnZUUlUpVkyePlOYt5Aw1yUVXfE2MRs3GY43HE19v6XbiQ9AZ800oVVLQJJj"
 );
 
 function App() {
   const { checkAuthorized, customer } = useContext(CustomerAuthContext);
   const [clientSecret, setClientSecret] = useState("")
+  const [count, setCount] = useState(0)
   const [order_items, setOrder_items] = useState(null);
 
+  const getClientSecret = async () => {
+    const res = await fetch('/create-payment-intent')
+    const { client_secret: clientSecret } = await res.json()
+    setClientSecret(clientSecret)
+  } 
   useEffect(() => {
     checkAuthorized();
-
     fetchOrderItems();
+    // getIndex()
+    getClientSecret()
+  
   }, [])
+
+  const appearance = {
+    theme: 'night',
+  }
+
+  const options = {
+    clientSecret,
+    appearance
+  }
+  
+  if (!clientSecret) return <h1>Loading...</h1>
 
   function fetchOrderItems() {
 
@@ -49,63 +69,9 @@ function App() {
       });
   }
 
-  function loadIntent() {
-
-    if (!order_items) {
-      console.error("Order is not defined.");
-      return;
-    }
-
-    const order_itemIds = order_items.map((order_item) => order_item.sku_id);
-    console.log(order_itemIds)
-
-        fetch("/create-payment-intent", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ items: order_itemIds, customer: customer.id }),
-        })
-          .then((res) => {
-            console.log(res);
-            if (!res.ok) {
-              throw new Error("Failed to fetch payment intent");
-            }
-            return res.json();
-          })
-          .then((data) => {
-            console.log("Stripe API: response:", data);
-            setClientSecret(data.clientSecret);
-          })
-          .catch((error) => {
-            console.error("Error fetching payment intent:", error);
-
-          if (error.response) {
-            console.error("Response Status:", error.response.status);
-            error.response.text().then((text) => {
-              console.error("Response Body:", text);
-            });
-            console.error("Stripe API response:", error.response);
-          }
-          });
-        }
-
-
-  useEffect(() => {
-    if (customer) {
-      loadIntent()}
-  }, [customer, order_items])
-
-  const appearance = {
-    theme: 'stripe',
-  };
-  
-  const options = {
-    clientSecret,
-    appearance,
-  };
-
-
   return (
   <div>
+    <Elements stripe={stripePromise} options={options}>
     <Header />
       <Switch>
         <Route path="/customer/:id" ><Profile /></Route>
@@ -118,16 +84,14 @@ function App() {
         <Route path="/products/:id"><ProductDetail /></Route>
         <Route path="/products"></Route>
         <Route path="/cart"><Cart /></Route>
+        <Route path="/confirmed"><PaymentStatus /></Route>
         <Route path="/checkout">
-          {clientSecret && (
-            <Elements stripe={stripePromise} options={options}>
-              <CheckoutForm />
-            </Elements>
-          )}
+          <CheckoutForm secret={clientSecret}/>
         </Route>
         <Route path="/"><Home /></Route>
       </Switch>
     <Footer />
+    </Elements>
       </div>
   )
 }

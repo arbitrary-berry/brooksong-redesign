@@ -4,9 +4,10 @@
 
 # Remote library imports
 from flask import abort, request, session
-from flask_restful import Resource
+from flask_restful import Api, Resource
 from sqlite3 import IntegrityError
-from flask import Flask, make_response, jsonify, request, session
+from flask import Flask, make_response, jsonify, request, session, redirect
+from flask_cors import CORS
 from sqlalchemy.exc import IntegrityError
 from dotenv import load_dotenv
 import os
@@ -93,6 +94,22 @@ class OrderById(Resource):
         if not order:
             raise ValueError("Order not found")
         return make_response(order.to_dict(), 200)
+    
+class OrderStatusUpdate(Resource):
+    def patch(self, id):
+        order = Order.query.filter_by(id=id).first()
+        try:
+            data = request.get_json()
+            order.paid_unpaid = data.get("paid_unpaid")
+            db.session.commit()
+
+            response = {"message": "Order paid successfully"}
+            return make_response(jsonify(response), 200)
+
+        except Exception as e:
+            error_message = str(e)
+            response = {"error": error_message}
+            return jsonify(response), 500
 
 
 
@@ -154,44 +171,47 @@ class Authorized(Resource):
         else:
             return make_response({"Error": "customer not found"}, 401)
         
-@app.route('/create-payment-intent', methods=['POST'])
-def create_payment():
-        try:
-            # Setup env vars beforehand 
-            stripe_keys = {
-                "secret_key": os.environ["STRIPE_SECRET_KEY"],
-                "publishable_key": os.environ["STRIPE_PUBLISHABLE_KEY"],
-            }
+@app.route('/create-payment-intent', methods=['POST', 'GET'])
+def create_payment_intent():
+    intent = stripe.PaymentIntent.create(amount=1099, currency="usd")
+    return jsonify(client_secret=intent.client_secret)
 
-            stripe.api_key = stripe_keys["secret_key"]
-            data = request.get_json()
+        # try:
+        #     # Setup env vars beforehand 
+        #     stripe_keys = {
+        #         "secret_key": os.environ["STRIPE_SECRET_KEY"],
+        #         "publishable_key": os.environ["STRIPE_PUBLISHABLE_KEY"],
+        #     }
 
-            if 'customer' not in data:
-                return jsonify(error='Invalid request: Missing "customer" key'), 400
+        #     stripe.api_key = stripe_keys["secret_key"]
+        #     data = request.get_json()
+
+        #     if 'customer' not in data:
+        #         return jsonify(error='Invalid request: Missing "customer" key'), 400
             
-            print(f"Request Data: {request.data}")
+        #     print(f"Request Data: {data}")
 
-            intent = stripe.PaymentIntent.create(
-                amount=2000,
-                currency='usd',
-                automatic_payment_methods=['card'],
-                metadata={
-                    'customer': data['customer']
-                },
-            )
+        #     intent = stripe.PaymentIntent.create(
+        #         amount=2000,
+        #         currency='usd',
+        #         automatic_payment_methods={'enabled': True,},
+        #         metadata={
+        #             'customer': data['customer']
+        #         },
+        #     )
 
-            # return jsonify({'clientSecret': intent['client_secret']}), 200
-            return make_response(jsonify({'clientSecret': intent['client_secret']}), 200)
+        #     # return jsonify({'clientSecret': intent['client_secret']}), 200
+        #     return make_response(jsonify({'clientSecret': intent['client_secret']}), 200)
 
-        except stripe.error.StripeError as e:
-            error_message = str(e)
-            print(f"Stripe Error creating payment intent: {error_message}")
-            return jsonify(error=f'Stripe Error: {error_message}'), 500
+        # except stripe.error.StripeError as e:
+        #     error_message = str(e)
+        #     print(f"Stripe Error creating payment intent: {error_message}")
+        #     return jsonify(error=f'Stripe Error: {error_message}'), 500
 
-        except Exception as e:
-            error_message = str(e)
-            print(f"Error creating payment intent: {error_message}")
-            return jsonify(error=f'Failed to create payment intent: {error_message}'), 500
+        # except Exception as e:
+        #     error_message = str(e)
+        #     print(f"Error creating payment intent: {error_message}")
+        #     return jsonify(error=f'Failed to create payment intent: {error_message}'), 500
 
 
 
@@ -210,35 +230,39 @@ def create_payment():
 #     except Exception as e:
 #         return jsonify(error=str(e)), 500
 
+@app.route("/confirmed", methods=["GET", "POST"])
+def payment_success():
+    # logic to make necessary updates in db
+    return redirect("/confirmed", code=302)
+    # return jsonify({"message": "success"}), 200
+# @app.route('/api/activities/check-payment-intent', methods=['POST'])
+# def check_payment():
+#         stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
+#         endpoint_secret = os.environ["STRIPE_ENDPOINT_KEY"]
 
-@app.route('/api/activities/check-payment-intent', methods=['POST'])
-def check_payment():
-        stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
-        endpoint_secret = os.environ["STRIPE_ENDPOINT_KEY"]
+#         event = None
+#         payload = request.data
+#         sig_header = request.headers['STRIPE_SIGNATURE']
 
-        event = None
-        payload = request.data
-        sig_header = request.headers['STRIPE_SIGNATURE']
+#         try:
+#             event = stripe.Webhook.construct_event(
+#                 payload, sig_header, endpoint_secret
+#             )
+#         except ValueError as e:
+#             raise e
+#         except stripe.error.SignatureVerificationError as e:
+#             raise e
 
-        try:
-            event = stripe.Webhook.construct_event(
-                payload, sig_header, endpoint_secret
-            )
-        except ValueError as e:
-            raise e
-        except stripe.error.SignatureVerificationError as e:
-            raise e
-
-        if event['type'] == 'payment_intent.succeeded':
-            payment_intent = event['data']['object']
-            user_uuid = payment_intent['metadata']['customer']
-            # Update the user here using the uuid and your db client
-            print(f"User {user_uuid} completed a payment.")
+#         if event['type'] == 'payment_intent.succeeded':
+#             payment_intent = event['data']['object']
+#             user_uuid = payment_intent['metadata']['customer']
+#             # Update the user here using the uuid and your db client
+#             print(f"User {user_uuid} completed a payment.")
         
-        else:
-            print('Unhandled event type {}'.format(event['type']))
+#         else:
+#             print('Unhandled event type {}'.format(event['type']))
 
-        return jsonify(success=True)
+#         return jsonify(success=True)
         
 api.add_resource(Authorized, '/authorized')   
 api.add_resource(Signup, "/signup")
@@ -251,6 +275,7 @@ api.add_resource(SKUsById, '/skus/<int:id>')
 api.add_resource(CustomerById, '/customer/<int:id>')
 api.add_resource(OrderItems, '/order_items')
 api.add_resource(OrderById, '/order/<int:id>')
+api.add_resource(OrderStatusUpdate, '/update-order-status/<int:id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

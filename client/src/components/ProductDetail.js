@@ -39,11 +39,10 @@ function ProductDetail() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [skuObj, setSkuObj] = useState(null);
   const [quantity, setQuantity] = useState(false);
-
   const { customer }= useContext(CustomerAuthContext)
+  const { addToCart } = useCart();
 
   const carouselRef = useRef(null);
-  const { addToCart } = useCart();
 
   const handleSkuChange = (e) => {
     setSkuObj(e.target.value)
@@ -64,10 +63,20 @@ function ProductDetail() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(productObj);
-    console.log('Selected Product: selectedProduct');
-    console.log(customer)
   
+    if (!customer){
+      console.error('Customer is not defined');
+      return;
+    }
+
+    if(!customer.current_cart) {
+      console.error('Current cart is not defined');
+      return;
+    }
+
+    const currentCartId = customer.current_cart.id;
+
+
     fetch('/order_items', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -121,7 +130,7 @@ function ProductDetail() {
       .then((res) => res.json())
       .then((data) => {
         setProductObj(data)
-        setSkuObj(data.skus[0])})
+        setSkuObj(data.skus[0].id)})
       .catch((error) => console.error("Error fetching productObj:", error));
   }, []);
   if (!productObj) return (<h1>loading</h1>)
@@ -161,7 +170,7 @@ function ProductDetail() {
                     <FormLabel id="demo-radio-buttons-group-label">color</FormLabel>
                       <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue={productObj.skus[0].id} 
+                        defaultValue={skuObj} 
                         name="radio-buttons-group"
                         onChange={handleSkuChange}
                       >
