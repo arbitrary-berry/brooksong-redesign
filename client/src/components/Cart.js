@@ -3,7 +3,22 @@ import { NavLink, useHistory } from "react-router-dom";
 import Button from '@mui/material/Button';
 import { styled } from "@mui/material";
 import { useCart } from '../context/CartContext';
-import CheckoutForm from "./CheckoutForm";
+import { useCustomerAuth } from '../context/CustomerAuthProvider';
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  backgroundColor: 'black', 
+  color: theme.palette.common.white,
+  borderRadius: "15%",
+  margin: "5px",
+  '&:hover': {
+    backgroundColor: 'white', 
+    color: 'black',
+  },
+  fontfamily: 'Lato, sans-serif',
+  fontSize: '16px', 
+  fontweight: 'bold',
+  textTransform: 'lowercase',
+}));
 
 const listStyle = {
   fontFamily: 'Merriweather, serif',
@@ -32,9 +47,13 @@ const buttonStyle = {
 
 
 function Cart({ orderId }) {
+  const [unpaidOrders, setUnpaidOrders] = useState([]);
+  const [unpaidOrderItems, setUnpaidOrderItems] = useState([]);
   const [order_items, setOrder_items] = useState([]);
-  const { cartItems } = useCart();
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
   const history = useHistory();
+  const { customer } = useCustomerAuth();
 
   const addToCart = (product) => {
     console.log('Adding to cart:', product)
@@ -51,67 +70,113 @@ function Cart({ orderId }) {
     return order_items.reduce((total, item) => total + item.sku.product.price, 0);
   };
 
-  const StyledButton = styled(Button)(({ theme }) => ({
-    backgroundColor: 'black', 
-    color: theme.palette.common.white,
-    borderRadius: "15%",
-    margin: "5px",
-    '&:hover': {
-      backgroundColor: 'white', 
-      color: 'black',
-    },
-    fontfamily: 'Lato, sans-serif',
-    fontSize: '16px', 
-    fontweight: 'bold',
-    textTransform: 'lowercase',
-  }));
+  const customerId = customer.id
+
 
   useEffect(() => {
-    fetch('/order_items')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Request failed with status: ${response.status}`);
+    const fetchUnpaidOrders = async () => {
+      try {
+        const response = await fetch(`/customer/${customerId}/unpaid-orders`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          const unpaidOrdersData = await response.json();
+          setUnpaidOrders(unpaidOrdersData);
+        } else {
+          console.error('Failed to fetch unpaid orders');
         }
-        return response.json();
-      })
-      .then((data) => {
-        setOrder_items(data);
-      })
-      .catch((error) => {
-        console.error('Error fetching order_items:', error);
-      });
-  }, []);
+      } catch (error) {
+        console.error('An error occurred:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUnpaidOrders();
+  }, [customerId]);
 
-  if (order_items.length === 0) {
+  useEffect(() => {
+    if (!Array.isArray(unpaidOrders) || unpaidOrders.length === 0) {
+      return;
+    }
+
+    const fetchUnpaidOrderItems = async () => {
+      try {
+        const unpaidOrderItemsData = [];
+
+        const fetchPromises = unpaidOrders.map(async (order) => {
+          try {
+            const response = await fetch(`/order/${order.id}/unpaid-order-items`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+            if (response.ok) {
+              const unpaidOrderItemsForOrder = await response.json();
+              unpaidOrderItemsData.push(...unpaidOrderItemsForOrder);
+            } else {
+              console.error(`Failed to fetch unpaid order items for order ID ${order.id}`);
+            }
+          } catch (error) {
+            console.error('An error occurred:', error);
+          }
+        });
+
+        await Promise.all(fetchPromises);
+  
+        setUnpaidOrderItems(unpaidOrderItemsData);
+        console.log('Data loaded successfully')
+
+        setDataLoaded(true);
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    };
+
+    fetchUnpaidOrderItems();
+  }, [unpaidOrders]);
+
+  if (!dataLoaded) {
     return (
       <div>
         <h2>Your Cart</h2>
-        <p>Your cart is empty.</p>
+        <p>Loading...</p>
       </div>
     );
   }
 
+  // if (order_items.length === 0) {
+  //   return (
+  //     <div>
+  //       <h2>Your Cart</h2>
+  //       <p>Your cart is empty.</p>
+  //     </div>
+  //   );
+  // }
+
   return (
     <div>
       <h2>Your Cart</h2>
-
-            {order_items.length === 0 ? (
+            {unpaidOrderItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <ul style={listStyle}>
-          {order_items.map((product) => (
-            <li key={product.sku.product.id} style={listItemStyle}>
+          {unpaidOrderItems.map((order_item) => (
+            <li key={order_item.sku.product.id} style={listItemStyle}>
               <div>
                 <img 
-                src={product.sku.product.photo1} 
-                alt={product.sku.product.name}
+                src={order_item.sku.product.photo1} 
+                alt={order_item.sku.product.name}
                 style={thumbnailImageStyle} />
               </div>
               <div style={productInfoStyle}>
-                {product.sku.product.name} - ${product.sku.product.price}
+                {order_item.sku.product.name} - ${order_item.sku.product.price}
               </div>
               <div style={buttonStyle}>
-                <StyledButton onClick={() => removeFromCart(product.id)}>Remove</StyledButton>
+                <StyledButton onClick={() => removeFromCart(order_item.id)}>Remove</StyledButton>
               </div>
             </li>
           ))}

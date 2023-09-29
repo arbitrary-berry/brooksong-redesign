@@ -7,13 +7,12 @@ const PaymentStatus = () => {
   const stripe = useStripe();
   const [message, setMessage] = useState(null);
   const location = useLocation();
-  const { customer, createNewCart } = useCustomerAuth();
+  const { customer, createNewOrder, checkAuthorized } = useCustomerAuth();
   
   const orderId = customer?.current_cart?.id || null;
-
+  debugger
   useEffect(() => {
-    if (!stripe || !orderId) {
-      setMessage('Order ID not found')
+    if (!stripe) {
       return;
     }
 
@@ -27,8 +26,6 @@ const PaymentStatus = () => {
           case 'succeeded':
             setMessage('Success! Payment received.');
 
-            createNewCart();
-
             fetch(`/update-order-status/${orderId}`, {
               method: 'PATCH',
               headers: {
@@ -36,7 +33,7 @@ const PaymentStatus = () => {
               },
               body: JSON.stringify({ paid_unpaid: 'paid' }),
             })
-              .then((response) => response.json())
+              .then(() => checkAuthorized())
               .catch((error) => {
                 console.error('Failed to update order status:', error);
               });
@@ -55,7 +52,7 @@ const PaymentStatus = () => {
             break;
         }
       });
-  }, [stripe, orderId, createNewCart]);
+  }, [stripe, orderId, createNewOrder]);
 
 
   return (

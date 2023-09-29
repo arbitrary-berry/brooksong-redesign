@@ -103,6 +103,15 @@ class OrderStatusUpdate(Resource):
             order.paid_unpaid = data.get("paid_unpaid")
             db.session.commit()
 
+            new_order = Order(
+            customer_id=session['customer_id'],
+            paid_unpaid="unpaid",
+            status="not shipped"
+            )
+        
+            db.session.add(new_order)
+            db.session.commit()
+
             response = {"message": "Order paid successfully"}
             return make_response(jsonify(response), 200)
 
@@ -110,6 +119,29 @@ class OrderStatusUpdate(Resource):
             error_message = str(e)
             response = {"error": error_message}
             return jsonify(response), 500
+
+class UnpaidOrders(Resource):
+    def get(self, customer_id):
+        # Retrieve unpaid order items associated with the customer
+        unpaid_order_items = db.session.query(OrderItem).join(Order).filter(
+            Order.customer_id == customer_id,
+            Order.paid_unpaid == 'unpaid'
+        ).all()
+
+        # Convert unpaid order items to dictionaries
+        unpaid_order_items_data = [order_item.to_dict() for order_item in unpaid_order_items]
+
+        # Retrieve unpaid orders associated with the customer
+        unpaid_orders = Order.query.filter_by(customer_id=customer_id, paid_unpaid='unpaid').all()
+
+        # Convert unpaid orders to dictionaries
+        unpaid_orders_data = [order.to_dict() for order in unpaid_orders]
+
+        # Return both unpaid orders and unpaid order items as a JSON response
+        return make_response({
+            "unpaid_orders": unpaid_orders_data,
+            "unpaid_order_items": unpaid_order_items_data
+        }, 200)
 
 
 ####### Handling Authorization #####
@@ -136,6 +168,7 @@ class Signup(Resource):
         
             db.session.add(new_order)
             db.session.commit()
+
         except Exception as e:
             abort(422, f"Invalid customer data {e}")
         
@@ -148,7 +181,6 @@ class Login(Resource):
         username = req_json['username']
         password = req_json['password']
 
-        # Retrieve the customer instance using the provided username
         customer = Customer.query.filter_by(username=username).first()
 
         if customer and customer.check_password(password):
@@ -157,8 +189,7 @@ class Login(Resource):
         return {'error': 'Invalid username or password'}, 401
 
 class Logout(Resource):
-
-    def delete(self): # just add this line!
+    def delete(self):
         session['customer_id'] = None
         return {'message': '204: No Content'}, 204
 
@@ -179,18 +210,6 @@ def create_payment_intent():
 def payment_success():
     return redirect("/confirmed", code=302)
 
-@app.route('/create-new-order', methods=['POST'])
-def create_new_order_route():
-    if 'customer_id' not in session:
-        return {'error': 'Customer not authenticated'}, 401
-
-    customer_id = session['customer_id']
-    try:
-        create_new_order(customer_id)
-        return {'message': 'New cart created successfully'}, 201
-    except Exception as e:
-        return {'error': f'Failed to create a new cart: {str(e)}'}, 500
-
 api.add_resource(Authorized, '/authorized')   
 api.add_resource(Signup, "/signup")
 api.add_resource(Login, "/login")
@@ -203,6 +222,7 @@ api.add_resource(CustomerById, '/customer/<int:id>')
 api.add_resource(OrderItems, '/order_items')
 api.add_resource(OrderById, '/order/<int:id>')
 api.add_resource(OrderStatusUpdate, '/update-order-status/<int:id>')
+api.add_resource(UnpaidOrders, '/customer/<int:customer_id>/unpaid-orders')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

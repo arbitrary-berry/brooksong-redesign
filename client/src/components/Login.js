@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 function Login({ onLogin }) {
   const history = useHistory();
 
-  const { handleAuthSubmit, error, createNewOrder } = useContext(CustomerAuthContext); 
+  const { handleAuthSubmit, error } = useContext(CustomerAuthContext); 
 
   return (
     <div>
@@ -27,7 +27,7 @@ function Login({ onLogin }) {
           const loginSuccess = await handleAuthSubmit(values, actions, 'login');
           
           if (loginSuccess) {
-            await createNewOrder();
+            // Redirect to the profile page
             history.push("/profile");
             onLogin();
           }

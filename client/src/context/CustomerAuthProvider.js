@@ -14,7 +14,6 @@ const CustomerAuthProvider = ({ children }) => {
 
   const handleAuthSubmit = async (values, actions, authType) => {
     try {
-      // Determine the endpoint based on authType
       const endpoint = authType === 'signup' ? '/signup' : '/login';
 
       const response = await fetch(`${endpoint}`, {
@@ -24,7 +23,7 @@ const CustomerAuthProvider = ({ children }) => {
         },
         body: JSON.stringify(values),
       });
-      //console.log(endpoint)
+
       if (response.ok) {
         const userData = await response.json();
         setCustomer(userData);
@@ -64,40 +63,38 @@ const CustomerAuthProvider = ({ children }) => {
     setError(null);
   };
 
-  const createNewOrder = async () => {
-    try {
+  // const createNewOrder = async () => {
+  //   try {
 
-      const orderData = {
-        customer_id: customer.id,
-        paid_unpaid: 'unpaid', // Initial status
-        status: 'not shipped', // Initial status
-      };
-      const response = await fetch('/create-new-order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // Include any necessary data in the request body
-        body: JSON.stringify(orderData),
-      });
+  //     const orderData = {
+  //       customer_id: customer.id,
+  //       paid_unpaid: 'unpaid', 
+  //       status: 'not shipped', 
+  //     };
 
-      if (response.ok) {
-        // Handle the successful creation of the cart (if needed)
-        // For example, you can set the new cart data in your state
-        const newOrderData = await response.json();
-        setCustomer((prevCustomer) => ({
-          ...prevCustomer,
-          current_order: newOrderData,
-        }));
-      } else {
-        // Handle errors if the cart creation fails
-        setError('Order creation failed');
-      }
-    } catch (error) {
-      // Handle any other errors that may occur
-      setError('An error occurred');
-    }
-  };
+  //     const response = await fetch('/create-new-order', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(orderData),
+  //     });
+
+  //     if (response.ok) {
+  //       const newOrderData = await response.json();
+        
+  //       setCustomer((prevCustomer) => ({
+  //         ...prevCustomer,
+  //         current_order: newOrderData,
+  //       }));
+  //       setError(null);
+  //     } else {
+  //       setError('Order creation failed');
+  //     }
+  //   } catch (error) {
+  //     setError('An error occurred');
+  //   }
+  // };
 
   const contextValue = {
     customer,
@@ -108,7 +105,7 @@ const CustomerAuthProvider = ({ children }) => {
     handleLogout,
     handleClick,
     checkAuthorized,
-    createNewOrder,
+    // createNewOrder,
   };
 
   return (
