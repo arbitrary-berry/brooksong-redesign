@@ -38,10 +38,15 @@ const CustomerAuthProvider = ({ children }) => {
   const checkAuthorized = async () => {
     const response = await fetch('/authorized')
     if (response.ok) {
-      const data = await response.json();
-      setCustomer(data);
-    }else {
-       setError('Bad credentials');
+      const customer = await response.json();
+      const cartResponse = await fetch(`/customers/${customer.id}`)
+      if (cartResponse.ok) {
+        const data = await cartResponse.json();
+        customer.current_cart = data.current_cart;
+        setCustomer(customer);
+      }
+    } else {
+      setError('Bad credentials');
     }
   }
 
