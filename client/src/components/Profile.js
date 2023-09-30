@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import Header from "./Header";
 import AccountDetails from "./AccountDetails";
-import { useParams } from "react-router-dom"; // Import useParams to get user ID
+import { useParams } from "react-router-dom";
 import { CustomerAuthContext } from "../context/CustomerAuthProvider";
 
 const Profile = () => {
@@ -9,11 +9,10 @@ const Profile = () => {
   const { id } = useParams(); 
 
   useEffect(() => {
-    fetch(`/customers/${id}`) // Use the 'id' from useParams
+    fetch(`/customers/${id}`)
       .then(response => response.json())
       .then(customer => setCustomer(customer))
       .catch(error => {
-        // Handle error, e.g., setUser(null) or show an error message
         console.error("Error fetching user:", error);
       });
   }, [id, setCustomer]);

@@ -27,7 +27,6 @@ function Login({ onLogin }) {
           const loginSuccess = await handleAuthSubmit(values, actions, 'login');
           
           if (loginSuccess) {
-            // Redirect to the profile page
             history.push("/profile");
             onLogin();
           }

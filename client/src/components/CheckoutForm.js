@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useStripe, useElements, PaymentElement, LinkAuthenticationElement, } from '@stripe/react-stripe-js';
+import React, { useState, useContext } from 'react';
+import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { CustomerAuthContext } from "../context/CustomerAuthProvider";
 import { useHistory } from 'react-router-dom';
 
@@ -45,7 +45,6 @@ const CheckoutForm = ({ secret }) => {
     <form onSubmit={handleSubmit}>
     <PaymentElement />
     <button disabled={!stripe}>Submit</button>
-    {/* Show error message to your customers */}
     {errorMessage && <div>{errorMessage}</div>}
   </form>
 );

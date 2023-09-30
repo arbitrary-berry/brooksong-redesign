@@ -11,10 +11,10 @@ const root = createRoot(container);
 
 root.render(
   <Router>
-    <CartProvider>
       <CustomerAuthProvider>
+      <CartProvider>
         <App />
+      </CartProvider>
       </CustomerAuthProvider>
-    </CartProvider>
   </Router>
 );

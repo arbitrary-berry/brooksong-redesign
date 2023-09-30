@@ -78,7 +78,7 @@ class Customer(db.Model, SerializerMixin):
             'email': self.email,
             'username': self.username,
             'address': self.address,
-            'current_cart': self.current_cart.to_dict() if self.current_cart else None
+            'current_cart': self.current_cart.to_dict() if self.current_cart else None 
         }
         return data
 

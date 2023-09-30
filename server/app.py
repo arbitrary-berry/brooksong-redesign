@@ -201,6 +201,19 @@ class Authorized(Resource):
         else:
             return make_response({"Error": "customer not found"}, 401)
         
+@app.route('/current-cart', methods=['GET'])
+def get_current_cart():
+    customer_id = session.get('customer_id')
+    customer = Customer.query.filter(Customer.id == customer_id).first()
+    if not customer:
+        return {"Error": "customer not found"}, 401
+    
+    current_cart = customer.current_cart
+    if current_cart:
+        return jsonify(current_cart.to_dict()), 200
+    else:
+        return {"Error": "No current carrt found for this customer"}, 404
+        
 @app.route('/create-payment-intent', methods=['POST', 'GET'])
 def create_payment_intent():
     intent = stripe.PaymentIntent.create(amount=1099, currency="usd")

@@ -45,7 +45,6 @@ const buttonStyle = {
   marginLeft: '10px',
 };
 
-
 function Cart({ orderId }) {
   const [unpaidOrders, setUnpaidOrders] = useState([]);
   const [unpaidOrderItems, setUnpaidOrderItems] = useState([]);
@@ -54,134 +53,68 @@ function Cart({ orderId }) {
   const [loading, setLoading] = useState(true);
   const history = useHistory();
   const { customer } = useCustomerAuth();
+  const { cartItems, addToCart, removeFromCart } = useCart();
+  const [products, setProducts] = useState({});
 
-  const addToCart = (product) => {
-    console.log('Adding to cart:', product)
-    setOrder_items([...order_items, product]);
-  };
-
-  const removeFromCart = (productId) => {
-    const updatedCart = order_items.filter((item) => item.id !== productId);
-    setOrder_items(updatedCart);
-  };
-  // this also needs to be a delete from the order_items table
+  useEffect(() => {
+    cartItems.order_items.forEach(item => {
+      fetch(`/products/${item.sku_id}`)
+        .then(response => response.json())
+        .then(product => {
+          setProducts(prevProducts => ({ ...prevProducts, [item.sku_id]: product }));
+        })
+        .catch(error => {
+          console.error('There has been a problem with your fetch operation:', error);
+        });
+    });
+  }, [cartItems.order_items]);
 
   const calculateTotalPrice = () => {
-    return order_items.reduce((total, item) => total + item.sku.product.price, 0);
+    return cartItems.order_items.reduce((total, item) => {
+      const product = products[item.sku_id];
+      if (product && product.price) {
+        return total + product.price;
+      }
+      return total;
+    }, 0);
   };
 
-  const customerId = customer.id
-
-
-  useEffect(() => {
-    const fetchUnpaidOrders = async () => {
-      try {
-        const response = await fetch(`/customer/${customerId}/unpaid-orders`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        if (response.ok) {
-          const unpaidOrdersData = await response.json();
-          setUnpaidOrders(unpaidOrdersData);
-        } else {
-          console.error('Failed to fetch unpaid orders');
-        }
-      } catch (error) {
-        console.error('An error occurred:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUnpaidOrders();
-  }, [customerId]);
-
-  useEffect(() => {
-    if (!Array.isArray(unpaidOrders) || unpaidOrders.length === 0) {
-      return;
-    }
-
-    const fetchUnpaidOrderItems = async () => {
-      try {
-        const unpaidOrderItemsData = [];
-
-        const fetchPromises = unpaidOrders.map(async (order) => {
-          try {
-            const response = await fetch(`/order/${order.id}/unpaid-order-items`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-            if (response.ok) {
-              const unpaidOrderItemsForOrder = await response.json();
-              unpaidOrderItemsData.push(...unpaidOrderItemsForOrder);
-            } else {
-              console.error(`Failed to fetch unpaid order items for order ID ${order.id}`);
-            }
-          } catch (error) {
-            console.error('An error occurred:', error);
-          }
-        });
-
-        await Promise.all(fetchPromises);
-  
-        setUnpaidOrderItems(unpaidOrderItemsData);
-        console.log('Data loaded successfully')
-
-        setDataLoaded(true);
-      } catch (error) {
-        console.error('An error occurred:', error);
-      }
-    };
-
-    fetchUnpaidOrderItems();
-  }, [unpaidOrders]);
-
-  if (!dataLoaded) {
+  console.log(cartItems);
+  if (cartItems.length === 0) {
     return (
       <div>
         <h2>Your Cart</h2>
-        <p>Loading...</p>
+        <p>Your cart is empty.</p>
       </div>
     );
   }
 
-  // if (order_items.length === 0) {
-  //   return (
-  //     <div>
-  //       <h2>Your Cart</h2>
-  //       <p>Your cart is empty.</p>
-  //     </div>
-  //   );
-  // }
-
   return (
     <div>
       <h2>Your Cart</h2>
-            {unpaidOrderItems.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
         <ul style={listStyle}>
-          {unpaidOrderItems.map((order_item) => (
-            <li key={order_item.sku.product.id} style={listItemStyle}>
-              <div>
-                <img 
-                src={order_item.sku.product.photo1} 
-                alt={order_item.sku.product.name}
-                style={thumbnailImageStyle} />
-              </div>
-              <div style={productInfoStyle}>
-                {order_item.sku.product.name} - ${order_item.sku.product.price}
+          {cartItems.order_items.map((item) => {
+            const product = products[item.sku_id];
+            return (
+              <li key={item.id} style={listItemStyle}>
+                <div>
+                  {product && product.photo1 && (
+                  <img 
+                    src={product.photo1} 
+                    alt={product.name}
+                    style={thumbnailImageStyle} />
+                  )}
+                </div>
+                <div style={productInfoStyle}>
+                {product && product.name && product.price && `${product.name} - $${product.price}`}
               </div>
               <div style={buttonStyle}>
-                <StyledButton onClick={() => removeFromCart(order_item.id)}>Remove</StyledButton>
+                <StyledButton onClick={() => removeFromCart(item.id)}>Remove</StyledButton>
               </div>
             </li>
-          ))}
+            );
+          })}
         </ul>
-      )}
       <p>Total Price: ${calculateTotalPrice()}</p>
       <NavLink to='/checkout'>
         <StyledButton>purchase</StyledButton>

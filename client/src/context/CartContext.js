@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
 
@@ -17,9 +17,19 @@ export const CartProvider = ({ children }) => {
     const updatedCart = cartItems.filter((item) => item.id !== itemId);
     setCartItems(updatedCart);
   };
+    // this also needs to be a delete from the order_items table
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      const response = await fetch('/current-cart');
+      const cartItemsData = await response.json();
+      setCartItems(cartItemsData)
+    };
+    fetchCartItems();
+  }, []);
+  
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ setCartItems, cartItems, addToCart, removeFromCart }}>
       {children}
     </CartContext.Provider>
   );
