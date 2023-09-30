@@ -33,14 +33,13 @@ const CustomerAuthProvider = ({ children }) => {
     } catch (error) {
       setError('An error occurred');
     }
-    
   };
 
   const checkAuthorized = async () => {
     const response = await fetch('/authorized')
     if (response.ok) {
-      const customer = await response.json();
-      setCustomer(customer);
+      const data = await response.json();
+      setCustomer(data);
     }else {
        setError('Bad credentials');
     }
@@ -62,39 +61,6 @@ const CustomerAuthProvider = ({ children }) => {
     setSignUp(!signUp);
     setError(null);
   };
-
-  // const createNewOrder = async () => {
-  //   try {
-
-  //     const orderData = {
-  //       customer_id: customer.id,
-  //       paid_unpaid: 'unpaid', 
-  //       status: 'not shipped', 
-  //     };
-
-  //     const response = await fetch('/create-new-order', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(orderData),
-  //     });
-
-  //     if (response.ok) {
-  //       const newOrderData = await response.json();
-        
-  //       setCustomer((prevCustomer) => ({
-  //         ...prevCustomer,
-  //         current_order: newOrderData,
-  //       }));
-  //       setError(null);
-  //     } else {
-  //       setError('Order creation failed');
-  //     }
-  //   } catch (error) {
-  //     setError('An error occurred');
-  //   }
-  // };
 
   const contextValue = {
     customer,

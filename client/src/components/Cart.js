@@ -88,7 +88,7 @@ function Cart({ orderId }) {
       </div>
     );
   }
-
+//need to add quantity and color, quantity is in order_items, and color is in skus
   return (
     <div>
       <h2>Your Cart</h2>
