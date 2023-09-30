@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-
-# Standard library imports
-
 # Remote library imports
 from flask import abort, request, session
 from flask_restful import Api, Resource
@@ -24,11 +20,8 @@ stripe_keys = {
     "secret_key": os.environ["STRIPE_SECRET_KEY"],
     "publishable_key": os.environ["STRIPE_PUBLISHABLE_KEY"],
 }
-# stripe_secret_key=os.getenv("STRIPE_SECRET_KEY")
-# stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+
 stripe.api_key = stripe_keys["secret_key"]
-# print(stripe)
-# Views go here!
 
 class Products(Resource):
     def get(self):
@@ -94,55 +87,6 @@ class OrderById(Resource):
         if not order:
             raise ValueError("Order not found")
         return make_response(order.to_dict(), 200)
-    
-class OrderStatusUpdate(Resource):
-    def patch(self, id):
-        order = Order.query.filter_by(id=id).first()
-        try:
-            data = request.get_json()
-            order.paid_unpaid = data.get("paid_unpaid")
-            db.session.commit()
-
-            new_order = Order(
-            customer_id=session['customer_id'],
-            paid_unpaid="unpaid",
-            status="not shipped"
-            )
-        
-            db.session.add(new_order)
-            db.session.commit()
-
-            response = {"message": "Order paid successfully"}
-            return make_response(jsonify(response), 200)
-
-        except Exception as e:
-            error_message = str(e)
-            response = {"error": error_message}
-            return jsonify(response), 500
-
-class UnpaidOrders(Resource):
-    def get(self, customer_id):
-        # Retrieve unpaid order items associated with the customer
-        unpaid_order_items = db.session.query(OrderItem).join(Order).filter(
-            Order.customer_id == customer_id,
-            Order.paid_unpaid == 'unpaid'
-        ).all()
-
-        # Convert unpaid order items to dictionaries
-        unpaid_order_items_data = [order_item.to_dict() for order_item in unpaid_order_items]
-
-        # Retrieve unpaid orders associated with the customer
-        unpaid_orders = Order.query.filter_by(customer_id=customer_id, paid_unpaid='unpaid').all()
-
-        # Convert unpaid orders to dictionaries
-        unpaid_orders_data = [order.to_dict() for order in unpaid_orders]
-
-        # Return both unpaid orders and unpaid order items as a JSON response
-        return make_response({
-            "unpaid_orders": unpaid_orders_data,
-            "unpaid_order_items": unpaid_order_items_data
-        }, 200)
-
 
 ####### Handling Authorization #####
 class Signup(Resource):
@@ -234,8 +178,6 @@ api.add_resource(SKUsById, '/skus/<int:id>')
 api.add_resource(CustomerById, '/customer/<int:id>')
 api.add_resource(OrderItems, '/order_items')
 api.add_resource(OrderById, '/order/<int:id>')
-api.add_resource(OrderStatusUpdate, '/update-order-status/<int:id>')
-api.add_resource(UnpaidOrders, '/customer/<int:customer_id>/unpaid-orders')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

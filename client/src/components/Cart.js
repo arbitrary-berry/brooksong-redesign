@@ -56,18 +56,18 @@ function Cart({ orderId }) {
   const { cartItems, addToCart, removeFromCart } = useCart();
   const [products, setProducts] = useState({});
 
-  useEffect(() => {
-    cartItems.order_items.forEach(item => {
-      fetch(`/products/${item.sku_id}`)
-        .then(response => response.json())
-        .then(product => {
-          setProducts(prevProducts => ({ ...prevProducts, [item.sku_id]: product }));
-        })
-        .catch(error => {
-          console.error('There has been a problem with your fetch operation:', error);
-        });
-    });
-  }, [cartItems.order_items]);
+  // useEffect(() => {
+  //   cartItems.order_items.forEach(item => {
+  //     fetch(`/products/${item.sku_id}`)
+  //       .then(response => response.json())
+  //       .then(product => {
+  //         setProducts(prevProducts => ({ ...prevProducts, [item.sku_id]: product }));
+  //       })
+  //       .catch(error => {
+  //         console.error('There has been a problem with your fetch operation:', error);
+  //       });
+  //   });
+  // }, [cartItems.order_items]);
 
   const calculateTotalPrice = () => {
     return cartItems.order_items.reduce((total, item) => {
@@ -109,15 +109,15 @@ function Cart({ orderId }) {
                 {product && product.name && product.price && `${product.name} - $${product.price}`}
               </div>
               <div style={buttonStyle}>
-                <StyledButton onClick={() => removeFromCart(item.id)}>Remove</StyledButton>
+                <StyledButton onClick={() => removeFromCart(item.id)}>X</StyledButton>
               </div>
             </li>
             );
           })}
         </ul>
-      <p>Total Price: ${calculateTotalPrice()}</p>
+      <p>Total: ${calculateTotalPrice()}</p>
       <NavLink to='/checkout'>
-        <StyledButton>purchase</StyledButton>
+        <StyledButton>checkout</StyledButton>
       </NavLink>
     </div>
   );

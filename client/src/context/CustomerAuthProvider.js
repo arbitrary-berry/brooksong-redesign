@@ -9,6 +9,7 @@ export const useCustomerAuth = () => {
 
 const CustomerAuthProvider = ({ children }) => {
   const [customer, setCustomer] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
   const [error, setError] = useState(null);
   const [signUp, setSignUp] = useState(false);
 
@@ -39,7 +40,7 @@ const CustomerAuthProvider = ({ children }) => {
     const response = await fetch('/authorized')
     if (response.ok) {
       const customer = await response.json();
-      const cartResponse = await fetch(`/customers/${customer.id}`)
+      const cartResponse = await fetch(`/customer/${customer.id}`)
       if (cartResponse.ok) {
         const data = await cartResponse.json();
         customer.current_cart = data.current_cart;
@@ -76,7 +77,8 @@ const CustomerAuthProvider = ({ children }) => {
     handleLogout,
     handleClick,
     checkAuthorized,
-    // createNewOrder,
+    cartItems,
+    setCartItems,
   };
 
   return (
