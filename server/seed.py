@@ -1,17 +1,12 @@
-#!/usr/bin/env python3
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 import json 
 from config import db, bcrypt
 from models import Product, SKU, Order, OrderItem, Customer
 
-# Standard library imports
 from random import randint, choice as rc
 
-# Local imports
 from app import app
-# from models import db
-# db.create_all()
 
 with open('db.json', 'r') as json_file:
     data = json.load(json_file)
@@ -42,22 +37,6 @@ def seed_database():
             stock=sku_data['stock']
         )
         db.session.add(sku)
-
-    # for order_data in data.get('orders', []):
-    #     order = Order(
-    #         customer_id=order_data['customer_id FK'],
-    #         paid_unpaid=order_data['paid/unpaid'],
-    #         status=order_data['status']
-    #     )
-    #     db.session.add(order)
-
-    # for order_item_data in data.get('order_items', []):
-    #     order_item = OrderItem(
-    #         sku_id=order_item_data['SKU_id FK'],
-    #         order_id=order_item_data['order_id FK'],
-    #         quantity=order_item_data['quantity']
-    #     )
-    #     db.session.add(order_item)
 
     for customer_data in data.get('customers', []):
         customer = Customer(
@@ -180,6 +159,5 @@ if __name__ == '__main__':
     with app.app_context():
         clear_database()
         print("Starting seed...")
-        # Seed code goes here!
         seed_database()
 

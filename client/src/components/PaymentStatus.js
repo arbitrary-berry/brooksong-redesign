@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useStripe } from '@stripe/react-stripe-js';
 import { useLocation } from 'react-router-dom';
 import { useCustomerAuth } from "../context/CustomerAuthProvider";

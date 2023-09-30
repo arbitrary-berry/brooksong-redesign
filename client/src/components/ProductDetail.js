@@ -73,9 +73,6 @@ function ProductDetail() {
       return;
     }
 
-    const currentCartId = customer.current_cart.id;
-
-
     fetch('/order_items', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

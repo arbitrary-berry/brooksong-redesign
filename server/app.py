@@ -1,4 +1,3 @@
-# Remote library imports
 from flask import abort, request, session
 from flask_restful import Api, Resource
 from sqlite3 import IntegrityError
@@ -10,9 +9,8 @@ import os
 import json
 import stripe
 
-# Local imports
 from config import app, db, api
-# Add your model imports
+
 from models import Product, SKU, OrderItem, Order, Customer
 
 load_dotenv()

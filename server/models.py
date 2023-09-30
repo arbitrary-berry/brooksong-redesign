@@ -5,7 +5,6 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 from config import db, bcrypt
 
-# Models go here!
 class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
 

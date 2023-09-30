@@ -1,18 +1,18 @@
 import React, { useState, useContext } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
-import { CustomerAuthContext } from "../context/CustomerAuthProvider";
+// import { CustomerAuthContext } from "../context/CustomerAuthProvider";
 import { useHistory } from 'react-router-dom';
 
 
 const CheckoutForm = ({ secret }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const { customer }= useContext(CustomerAuthContext);
+  // const { customer }= useContext(CustomerAuthContext);
   const history = useHistory();
 
-  const [email, setEmail] = useState('');
+  // const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
