@@ -56,22 +56,12 @@ function Cart({ orderId }) {
   const { cartItems, addToCart, removeFromCart } = useCart();
   const [products, setProducts] = useState({});
 
-  // useEffect(() => {
-  //   cartItems.order_items.forEach(item => {
-  //     fetch(`/products/${item.sku_id}`)
-  //       .then(response => response.json())
-  //       .then(product => {
-  //         setProducts(prevProducts => ({ ...prevProducts, [item.sku_id]: product }));
-  //       })
-  //       .catch(error => {
-  //         console.error('There has been a problem with your fetch operation:', error);
-  //       });
-  //   });
-  // }, [cartItems.order_items]);
-
   const calculateTotalPrice = () => {
+    if (!cartItems.order_items) {
+      return 0;
+    }
     return cartItems.order_items.reduce((total, item) => {
-      const product = products[item.sku_id];
+      const product = item.sku.product;
       if (product && product.price) {
         return total + product.price;
       }
@@ -80,7 +70,7 @@ function Cart({ orderId }) {
   };
 
   console.log(cartItems);
-  if (cartItems.length === 0) {
+  if (!cartItems.order_items || cartItems.order_items.length === 0) {
     return (
       <div>
         <h2>Your Cart</h2>
@@ -93,8 +83,8 @@ function Cart({ orderId }) {
     <div>
       <h2>Your Cart</h2>
         <ul style={listStyle}>
-          {cartItems.order_items.map((item) => {
-            const product = products[item.sku_id];
+          {cartItems.order_items && cartItems.order_items.map((item) => {
+            const product = item.sku.product;
             return (
               <li key={item.id} style={listItemStyle}>
                 <div>

@@ -31,7 +31,7 @@ class SKU(db.Model, SerializerMixin):
     stock = db.Column(db.Integer)
 
     order_items = relationship('OrderItem', backref='sku')
-    serialize_rules = ("-order-items.sku",)
+    serialize_rules = ("-order_items.sku",)
 
 class OrderItem(db.Model, SerializerMixin):
     __tablename__ = "order_items"
@@ -52,7 +52,7 @@ class Order(db.Model, SerializerMixin):
     status = db.Column(db.String)
 
     order_items = relationship('OrderItem', backref='order', cascade='delete')
-    serialize_rules=("-order_items.order", "-order_items.sku")
+    serialize_rules=("-order_items.order", "-order_items.sku", "-customer")
     order_items_proxy = association_proxy('order_items', 'sku')
 
 class Customer(db.Model, SerializerMixin):
@@ -77,7 +77,7 @@ class Customer(db.Model, SerializerMixin):
             'email': self.email,
             'username': self.username,
             'address': self.address,
-            'current_cart': self.current_cart.to_dict() if self.current_cart else None 
+            'current_cart': self.current_cart.to_dict(rules=("order_items.sku",)) if self.current_cart else None 
         }
         return data
 

@@ -70,7 +70,7 @@ function App() {
 
   return (
   <div>
-    <Elements stripe={stripePromise} options={options}>
+    <Elements stripe={stripePromise} options={options} key={clientSecret}>
     <Header />
       <Switch>
         <Route path="/customer/:id" ><Profile /></Route>
@@ -80,7 +80,7 @@ function App() {
         <Route path="/story" ><Story /></Route>
         <Route path="/donation"><Donation /></Route>
         <Route path="/faqs"><FAQs /></Route>
-        <Route path="/products/:id"><ProductDetail /></Route>
+        <Route path="/products/:id"><ProductDetail createIntent={getClientSecret}/></Route>
         <Route path="/products"></Route>
         <Route path="/cart"><Cart /></Route>
         <Route path="/confirmed"><PaymentStatus /></Route>

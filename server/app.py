@@ -154,7 +154,7 @@ def get_current_cart():
     if current_cart:
         return jsonify(current_cart.to_dict()), 200
     else:
-        return {"Error": "No current carrt found for this customer"}, 404
+        return {"Error": "No current cart found for this customer"}, 404
         
 @app.route('/create-payment-intent', methods=['POST', 'GET'])
 def create_payment_intent():
@@ -164,6 +164,37 @@ def create_payment_intent():
 @app.route("/confirmed", methods=["GET", "POST"])
 def payment_success():
     return redirect("/confirmed", code=302)
+
+@app.route('/update-order-status/<int:orderId>', methods=['PATCH'])
+def update_order_status(orderId):
+    req_json = request.get_json()
+    print(req_json)
+
+    try:
+        paid_unpaid = req_json['paid_unpaid']
+        order = Order.query.filter_by(id=orderId).first()
+        if not order:
+            raise ValueError("Order not found")
+
+        order.paid_unpaid = paid_unpaid
+        new_order = Order(
+            customer_id=session['customer_id'],
+            paid_unpaid="unpaid",
+            status="not shipped"
+            )
+        
+        db.session.add(new_order)
+        db.session.commit()
+
+        return make_response(order.to_dict(), 200)
+    
+    except KeyError as e:
+        missing_field = str(e)
+        print(f"keyError: {missing_field}")
+        return {'error': f'Missing required field: {missing_field}'}, 400
+    except IntegrityError:
+        return {'error': 'Database integrity violation'}, 500
+
 
 api.add_resource(Authorized, '/authorized')   
 api.add_resource(Signup, "/signup")

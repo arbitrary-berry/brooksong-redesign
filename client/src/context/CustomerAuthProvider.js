@@ -1,5 +1,5 @@
-// CustomerAuthProvider.js
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext } from 'react'; 
+import { useCart } from './CartContext';
 
 const CustomerAuthContext = createContext();
 
@@ -9,10 +9,10 @@ export const useCustomerAuth = () => {
 
 const CustomerAuthProvider = ({ children }) => {
   const [customer, setCustomer] = useState(null);
-  const [cartItems, setCartItems] = useState([]);
+  // const [cartItems, setCartItems] = useState([]);
   const [error, setError] = useState(null);
   const [signUp, setSignUp] = useState(false);
-
+  const { cartItems, setCartItems } = useCart()
   const handleAuthSubmit = async (values, actions, authType) => {
     try {
       const endpoint = authType === 'signup' ? '/signup' : '/login';
@@ -28,6 +28,7 @@ const CustomerAuthProvider = ({ children }) => {
       if (response.ok) {
         const userData = await response.json();
         setCustomer(userData);
+        setCartItems(userData.current_cart);
       } else {
         setError('Authentication error'); 
       }
@@ -45,6 +46,7 @@ const CustomerAuthProvider = ({ children }) => {
         const data = await cartResponse.json();
         customer.current_cart = data.current_cart;
         setCustomer(customer);
+        setCartItems(customer.current_cart);
       }
     } else {
       setError('Bad credentials');
@@ -77,8 +79,6 @@ const CustomerAuthProvider = ({ children }) => {
     handleLogout,
     handleClick,
     checkAuthorized,
-    cartItems,
-    setCartItems,
   };
 
   return (

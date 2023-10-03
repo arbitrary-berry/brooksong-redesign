@@ -31,7 +31,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import "../index.css";
 
 
-function ProductDetail() {
+function ProductDetail({ createIntent }) {
   const [productObj, setProductObj] = useState(null);
   const { id } = useParams()
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -91,7 +91,8 @@ function ProductDetail() {
       .then((newOrderItem) => {
         console.log('New Order Item:', newOrderItem);
   
-        addToCart(newOrderItem); 
+        addToCart(newOrderItem);
+        createIntent();
       })
       .catch((error) => console.error('Error:', error));
   }

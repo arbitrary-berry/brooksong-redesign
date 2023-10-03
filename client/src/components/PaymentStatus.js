@@ -10,7 +10,7 @@ const PaymentStatus = () => {
   const { customer, createNewOrder, checkAuthorized } = useCustomerAuth();
   
   const orderId = customer?.current_cart?.id || null;
-  debugger
+
   useEffect(() => {
     if (!stripe) {
       return;
@@ -52,7 +52,7 @@ const PaymentStatus = () => {
             break;
         }
       });
-  }, [stripe, orderId, createNewOrder]);
+  }, []);
 
 
   return (

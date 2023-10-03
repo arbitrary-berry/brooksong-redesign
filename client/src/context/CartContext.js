@@ -6,11 +6,11 @@ export const useCart = () => {
   return useContext(CartContext);
 };
 
-export const CartProvider = ({ children }) => {
+const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (item) => {
-    setCartItems([...cartItems, item]);
+    setCartItems({ ...cartItems, order_items: [...cartItems.order_items, item]});
   };
 
   const removeFromCart = (itemId) => {
@@ -34,3 +34,5 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
+
+export default CartProvider;
