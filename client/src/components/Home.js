@@ -182,7 +182,7 @@ function Home() {
       </Typography>
     </div>
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} style={{ marginTop: '20px' }}>
         <Grid item xs={7}>
           <img src="/images/Yellow_Megan_bag_coffee.jpg" alt="yellow megan bag at cafe" style={containerStyle}/>
             <div style={containerStyle2}></div>
